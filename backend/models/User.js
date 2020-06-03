@@ -7,7 +7,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true,
-      maxlength: 15,
+      maxlength: 32,
       unique: true,
       index: true,
       lowercase: true,
@@ -33,7 +33,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    salt: Number,
+    salt: String,
     about: {
       type: String,
     },
@@ -66,7 +66,7 @@ userSchema
 
 userSchema.methods = {
   authenticate: function () {
-    return this.encryptPassword(plainText) === this.hashed_password
+    return this.encryptPassword(plainText) === this.hashed_password;
   },
   encryptPassword: function (password) {
     if (!password) return "";
