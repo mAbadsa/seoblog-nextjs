@@ -1,13 +1,10 @@
 import Layout from "../components/Layout";
-import Link from "next/link";
+import SigninComponent from "../components/auth/SigninComponent";
 
 const Signin = () => {
   return (
     <Layout>
-      <h1>تسجيل الدخول</h1>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
+      <SigninComponent />
     </Layout>
   );
 };
