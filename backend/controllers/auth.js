@@ -57,7 +57,7 @@ const signin = (req, res) => {
       success: true,
       user: { _id, email, name, role, username },
       token,
-      error: err
+      error: err,
     });
   });
 };
@@ -75,9 +75,42 @@ const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
 });
 
+const authMiddleware = (req, res, next) => {
+  const userId = req.user._id;
+  User.findById({ _id: userId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+    req.profile = user;
+    next();
+  });
+};
+
+const adminMiddleware = (req, res, next) => {
+  const adminId = req.user._id;
+  User.findById({ _id: adminId }).exec((err, user) => {
+    if (err || !user) {
+      return res.status(400).json({
+        error: "User not found",
+      });
+    }
+    if (user.role !== 1) {
+      return res.status(400).json({
+        error: "Admin redource, Access denied",
+      });
+    }
+    res.profile = user;
+    next();
+  });
+};
+
 module.exports = {
   signup,
   signin,
   signout,
   requireSignin,
+  authMiddleware,
+  adminMiddleware,
 };
