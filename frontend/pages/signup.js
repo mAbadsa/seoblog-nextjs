@@ -1,13 +1,11 @@
 import Layout from "../components/Layout";
+import SignupComponent from "../components/auth/SignupComponent";
 import Link from "next/link";
 
 const Signup = () => {
   return (
     <Layout>
-      <h1>إنشاء حساب جديد</h1>
-      <Link href="/">
-        <a>Home</a>
-      </Link>
+      <SignupComponent />
     </Layout>
   );
 };
