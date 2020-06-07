@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { signup } from "../../actions/auth";
 
 const SignupComponent = () => {
   const [values, setValues] = useState({
@@ -15,10 +16,25 @@ const SignupComponent = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setValues({
-    //   [e.target.name]: e.target.value,
-    // });
-    console.log(values);
+
+    setValues({ ...values, loading: true, error: false });
+
+    signup({ name, email, password }).then((data) => {
+      if (data.error) {
+        setValues({ ...values, error: data.error, loading: false });
+      } else {
+        setValues({
+          ...values,
+          name: "",
+          email: "",
+          password: "",
+          error: "",
+          loading: false,
+          message: data.message,
+          showForm: false,
+        });
+      }
+    });
   };
 
   const handleChange = (e) => {
@@ -30,12 +46,21 @@ const SignupComponent = () => {
     });
   };
 
+  const showLoading = () =>
+    loading ? <div className="alert alert-info">Loading...</div> : "";
+
+  const showError = () =>
+    error ? <div className="alert alert-danger">{error}</div> : "";
+
+  const showMessage = () =>
+    message ? <div className="alert alert-info">{message}</div> : "";
+
   const signupForm = () => {
     return (
       <div className="container">
-        <h1 className="my-3 pb-3">Signup</h1>
+        <h1 className="my-3 pb-3 text-center">Signup</h1>
         <div className="row">
-          <div className="col-lg-8">
+          <div className="col-md-6 offset-3">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
                 <label>Name: </label>
@@ -71,7 +96,9 @@ const SignupComponent = () => {
                 />
               </div>
               <div>
-                <button className="btn btn-primary">Signup</button>
+                <button className="btn btn-outline-primary btn-block">
+                  Signup
+                </button>
               </div>
             </form>
           </div>
@@ -79,6 +106,13 @@ const SignupComponent = () => {
       </div>
     );
   };
-  return <React.Fragment>{signupForm()}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {showLoading()}
+      {showError()}
+      {showMessage()}
+      {showForm && signupForm()}
+    </React.Fragment>
+  );
 };
 export default SignupComponent;

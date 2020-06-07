@@ -6,11 +6,12 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db");
 
+// Load env vars
+dotenv.config({ path: "./config/.env" });
+
 const blogRoutes = require("./routes/blog");
 const authRoutes = require("./routes/auth");
 
-// Load env vars
-dotenv.config({ path: "./config/.env" });
 
 connectDB();
 

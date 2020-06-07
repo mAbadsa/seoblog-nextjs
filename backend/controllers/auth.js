@@ -24,6 +24,7 @@ const signup = (req, res) => {
       res.status(201).json({
         user,
         message: "Signup success.",
+        error: err,
       });
     });
   });
