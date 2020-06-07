@@ -57,6 +57,7 @@ const signin = (req, res) => {
       success: true,
       user: { _id, email, name, role, username },
       token,
+      error: err
     });
   });
 };
