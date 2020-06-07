@@ -38,14 +38,14 @@ export const setCookie = (key, value) => {
 // remove cookie
 export const removeCookie = (key) => {
   if (process.browser) {
-    cookie.remove(key);
+    cookie.remove(key, { expires: 1 });
   }
 };
 
 // get cookie
 export const getCookie = (key) => {
   if (process.browser) {
-    cookie.get(key, { expires: 1 });
+    return cookie.get(key);
   }
 };
 
@@ -80,4 +80,16 @@ export const isAuth = () => {
       return false;
     }
   }
+};
+
+export const signout = (next) => {
+  removeCookie("token");
+  removeLocalStorage("user");
+  next();
+
+  return fetch(`${API}/signout`, {
+    method: "GET",
+  })
+    .then((res) => console.log(res))
+    .catch((err) => console.log(err));
 };
