@@ -22,7 +22,7 @@ router.route("/signin").post(userSigninValidator, runValidation, signin);
 router.route("/signout").get(signout);
 
 router.route("/secret").get(requireSignin, (req, res) => {
-  res.json({ msg: "Secret Route" });
+  res.json({ user: req.user });
 });
 
 module.exports = router;
