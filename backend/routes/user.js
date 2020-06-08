@@ -6,6 +6,7 @@ const {
   authMiddleware,
   adminMiddleware,
 } = require("../controllers/auth");
+
 const { read } = require("../controllers/user");
 
 router.route("/profile").get(requireSignin, adminMiddleware, read);

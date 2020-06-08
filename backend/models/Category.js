@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const categorySchema = mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -8,7 +8,7 @@ const categorySchema = mongoose.Schema(
       required: true,
       max: 32,
     },
-    sulg: {
+    slug: {
       type: String,
       unique: true,
       index: true,
