@@ -1,5 +1,5 @@
 const express = require("express");
-const { createCategory } = require("../controllers/category");
+const { createCategory, listOfCategories } = require("../controllers/category");
 const { requireSignin, adminMiddleware } = require("../controllers/auth");
 
 const { runValidation } = require("../validators/index");
@@ -9,7 +9,6 @@ const router = express.Router();
 
 router
   .route("/category")
-  .get()
   .post(
     categoryCreateValidator,
     runValidation,
@@ -17,5 +16,12 @@ router
     adminMiddleware,
     createCategory
   );
+
+router.route("/categories").get(listOfCategories);
+
+// router
+//   .route("/category/:sulg")
+//   .get(getCategory)
+//   .delete(requireSignin, adminMiddleware, delCategory);
 
 module.exports = router;
