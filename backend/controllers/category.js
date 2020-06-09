@@ -9,7 +9,6 @@ const createCategory = (req, res) => {
   let category = new Category({ name, slug });
 
   category.save((err, category) => {
-    console.log(err);
     if (err) {
       return res.status(400).json({
         error: errorHandler(err),
@@ -38,14 +37,12 @@ const listOfCategories = (req, res) => {
 };
 
 const getCategory = (req, res) => {
-  const slug = req.params.sulg.toLowerCase();
+  const slug = req.params.slug.toLowerCase();
   Category.findOne({ slug }).exec((err, category) => {
     if (err) {
-      if (err) {
-        return res.status(200).json({
-          error: errorHandler(err),
-        });
-      }
+      return res.status(200).json({
+        error: errorHandler(err),
+      });
     }
     res.status(200).json({
       message: "Get category successed",
@@ -55,13 +52,12 @@ const getCategory = (req, res) => {
 };
 
 const delCategory = (req, res) => {
-  Category.findOneAndDelete({ slug: req.params.sulg }).exec((err, category) => {
+  const slug = req.params.slug.toLowerCase();
+  Category.findOneAndDelete({ slug }).exec((err, category) => {
     if (err) {
-      if (err) {
-        return res.status(200).json({
-          error: errorHandler(err),
-        });
-      }
+      return res.status(200).json({
+        error: errorHandler(err),
+      });
     }
     res.status(200).json({
       message: "Delete category successed",

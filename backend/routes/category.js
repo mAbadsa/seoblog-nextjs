@@ -25,7 +25,7 @@ router
 router.route("/categories").get(listOfCategories);
 
 router
-  .route("/category/:sulg")
+  .route("/category/:slug")
   .get(getCategory)
   .delete(requireSignin, adminMiddleware, delCategory);
 
