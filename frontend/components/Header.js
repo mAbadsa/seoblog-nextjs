@@ -3,6 +3,7 @@ import { APP_NAME } from "../config";
 import Link from "next/link";
 import Router from "next/router";
 import { signout, isAuth } from "../actions/auth";
+import NProgress from "nprogress";
 
 import {
   Collapse,
@@ -19,6 +20,10 @@ import {
   NavbarText,
 } from "reactstrap";
 
+Router.onRouteChangeStart = (url) => NProgress.start();
+Router.onRouteChangeComplete = (url) => NProgress.done();
+Router.onRouteChangeError = (url) => NProgress.done();
+
 const Header = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -28,7 +33,9 @@ const Header = (props) => {
     <div>
       <Navbar color="light" light expand="md">
         <Link href="/">
-          <NavLink className="font-weight-bold">{APP_NAME}</NavLink>
+          <NavLink style={{ cursor: "pointer" }} className="font-weight-bold">
+            {APP_NAME}
+          </NavLink>
         </Link>
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
