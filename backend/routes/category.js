@@ -1,5 +1,10 @@
 const express = require("express");
-const { createCategory, listOfCategories } = require("../controllers/category");
+const {
+  createCategory,
+  listOfCategories,
+  getCategory,
+  delCategory,
+} = require("../controllers/category");
 const { requireSignin, adminMiddleware } = require("../controllers/auth");
 
 const { runValidation } = require("../validators/index");
@@ -19,9 +24,9 @@ router
 
 router.route("/categories").get(listOfCategories);
 
-// router
-//   .route("/category/:sulg")
-//   .get(getCategory)
-//   .delete(requireSignin, adminMiddleware, delCategory);
+router
+  .route("/category/:sulg")
+  .get(getCategory)
+  .delete(requireSignin, adminMiddleware, delCategory);
 
 module.exports = router;
