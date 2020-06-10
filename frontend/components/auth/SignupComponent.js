@@ -68,7 +68,7 @@ const SignupComponent = () => {
           <div className="col-md-6 offset-3">
             <form onSubmit={handleSubmit}>
               <div className="form-group">
-                <label>Name: </label>
+                <label className="text-muted">Name: </label>
                 <input
                   value={name}
                   onChange={handleChange}
@@ -79,7 +79,7 @@ const SignupComponent = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Email: </label>
+                <label className="text-muted">Email: </label>
                 <input
                   value={email}
                   onChange={handleChange}
@@ -90,7 +90,7 @@ const SignupComponent = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Password: </label>
+                <label className="text-muted">Password: </label>
                 <input
                   value={password}
                   onChange={handleChange}

@@ -78,7 +78,7 @@ const SigninComponent = () => {
                 />
               </div> */}
               <div className="form-group">
-                <label>Email: </label>
+                <label className="text-muted">Email: </label>
                 <input
                   value={email}
                   onChange={handleChange}
@@ -89,7 +89,7 @@ const SigninComponent = () => {
                 />
               </div>
               <div className="form-group">
-                <label>Password: </label>
+                <label className="text-muted">Password: </label>
                 <input
                   value={password}
                   onChange={handleChange}
