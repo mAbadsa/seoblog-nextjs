@@ -16,4 +16,31 @@ const createCategory = (categoryName, token) => {
     .catch((err) => console.log(err));
 };
 
-export { createCategory };
+const getCategories = () => {
+  return fetch(`${API}/categories`, {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
+const getCategory = (slug) => {
+  return fetch(`${API}/category/${slug}`, {
+    method: "GET",
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
+const deleteCategory = (slug, token) => {
+  return fetch(`${API}/category/${slug}`, {
+    method: "DELETE",
+    headers: {
+        "Authorization": `Bearer ${token}`
+    }
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
+export { createCategory, getCategories, getCategory, deleteCategory };
