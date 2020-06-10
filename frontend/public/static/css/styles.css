@@ -1,4 +1,4 @@
-/* #nprogress .bar {
-  height: 10px !important;
-  background-color: brown;
-} */
+#nprogress .bar {
+  height: 5px !important;
+  background-color: #34db50 !important;
+}
