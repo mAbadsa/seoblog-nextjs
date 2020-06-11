@@ -4,12 +4,7 @@ import Alert from "@material-ui/lab/Alert";
 import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
 
-import {
-  createCategory,
-  getCategories,
-  getCategory,
-  deleteCategory,
-} from "../../actions/category";
+import { createTag, getTags, getTag, deleteTag } from "../../actions/tag";
 import { isAuth, getCookie } from "../../actions/auth";
 import Router from "next/router";
 
@@ -19,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "start",
     flexWrap: "wrap",
     "& > *": {
-      margin: theme.spacing(0.5),
+      margin: theme.spacing(0.1),
     },
   },
   MuiChipColorPrimary: {
@@ -28,12 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Category = () => {
+const Tag = () => {
   const [values, setValues] = useState({
     name: "",
     error: false,
     success: false,
-    categories: [],
+    tags: [],
     removed: false,
     reload: false,
     message: "",
@@ -48,7 +43,7 @@ const Category = () => {
     name,
     error,
     success,
-    categories,
+    tags,
     removed,
     reload,
     message,
@@ -57,7 +52,7 @@ const Category = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    createCategory({ name }, getCookie("token")).then((data) => {
+    createTag({ name }, getCookie("token")).then((data) => {
       if (data.error) {
         handleClick();
         setValues({
@@ -97,11 +92,11 @@ const Category = () => {
   };
 
   useEffect(() => {
-    loadCategory();
+    loadTag();
   }, [reload]);
 
-  const loadCategory = () => {
-    return getCategories().then(({ data }) => {
+  const loadTag = () => {
+    return getTags().then(({ data }) => {
       if (data.error) {
         setValues({
           ...values,
@@ -115,7 +110,7 @@ const Category = () => {
           error: false,
           success: false,
           name: "",
-          categories: [...data],
+          tags: [...data],
           removed: false,
         });
       }
@@ -127,14 +122,14 @@ const Category = () => {
       "Are you sure you want to delete this category?"
     );
     if (answer) {
-      deleteCategory(slug, getCookie("token")).then((data) => {
+      deleteTag(slug, getCookie("token")).then((data) => {
         if (data.error) {
           handleClick();
           setValues({
             ...values,
             error: data.error,
             success: false,
-            message: "Delete category is faild",
+            message: "Delete tag is faild",
             condition: "error",
           });
         } else {
@@ -144,10 +139,10 @@ const Category = () => {
             error: false,
             success: false,
             name: "",
-            categories: [],
+            tags: [],
             reload: !reload,
             removed: !removed,
-            message: "Delete category succesed",
+            message: "Delete tag succesed",
             condition: "success",
           });
         }
@@ -155,15 +150,14 @@ const Category = () => {
     }
   };
 
-  let categoryListItems = categories.map((category) => {
+  let tagListItems = tags.map((tag) => {
     return (
       <Chip
         className={classes.MuiChipColorPrimary}
-        onDelete={() => deleteConfirm(category.slug)}
-        label={category.name}
-        key={category._id}
+        onDelete={() => deleteConfirm(tag.slug)}
+        label={tag.name}
+        key={tag._id}
         color="primary"
-        // variant="outlined"
       />
     );
   });
@@ -199,10 +193,10 @@ const Category = () => {
           type="submit"
           className="btn btn-outline-primary mb-2"
         >
-          Add category
+          Add tag
         </button>
       </form>
-      <div className={classes.root}>{categoryListItems}</div>
+      <div className={classes.root}>{tagListItems}</div>
       <Snackbar
         open={open}
         autoHideDuration={2000}
@@ -222,4 +216,4 @@ const Category = () => {
   );
 };
 
-export default Category;
+export default Tag;
