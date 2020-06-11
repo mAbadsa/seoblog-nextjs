@@ -12,7 +12,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "start",
+    alignContent: "start",
+    minHeight: "8rem",
     flexWrap: "wrap",
+    padding: "0.8rem",
+    backgroundColor: "#8ac5ff",
+    borderRadius: "1rem",
     "& > *": {
       margin: theme.spacing(0.1),
     },

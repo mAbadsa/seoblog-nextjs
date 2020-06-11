@@ -3,6 +3,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import Chip from "@material-ui/core/Chip";
 import { makeStyles } from "@material-ui/core/styles";
+// import Divider from "@material-ui/core/Divider";
 
 import {
   createCategory,
@@ -17,7 +18,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
     justifyContent: "start",
+    alignContent: "start",
+    minHeight: "8rem",
     flexWrap: "wrap",
+    padding: "0.8rem",
+    backgroundColor: "#8ac5ff",
+    borderRadius: "1rem",
     "& > *": {
       margin: theme.spacing(0.5),
     },
@@ -41,6 +47,7 @@ const Category = () => {
   });
 
   const classes = useStyles();
+  console.log(classes.root);
 
   const [open, setOpen] = useState(false);
 
