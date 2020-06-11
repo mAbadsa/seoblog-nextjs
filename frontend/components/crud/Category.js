@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
 import {
   createCategory,
   getCategories,
@@ -16,30 +18,39 @@ const Category = () => {
     categories: [],
     removed: false,
     reload: false,
+    message: "",
+    condition: "",
   });
 
-  const { name, error, success, categories, removed, reload } = values;
+  const [open, setOpen] = useState(false);
+
+  const {
+    name,
+    error,
+    success,
+    categories,
+    removed,
+    reload,
+    message,
+    condition,
+  } = values;
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // setValues({
-    //   ...values,
-    //   [e.target.name]: e.target.value,
-    //   error: false,
-    //   success: false,
-    //   removed: false,
-    //   reload: false,
-    // });
     createCategory({ name }, getCookie("token")).then((data) => {
       if (data.error) {
+        handleClick();
         setValues({
           ...values,
           error: data.error,
           success: false,
           reload: false,
           removed: false,
+          message: "Add category is faild",
+          condition: "error",
         });
       } else {
+        handleClick();
         setValues({
           ...values,
           error: false,
@@ -47,6 +58,8 @@ const Category = () => {
           name: "",
           removed: !removed,
           reload: !reload,
+          message: "Add category is success",
+          condition: "success",
         });
       }
     });
@@ -70,7 +83,12 @@ const Category = () => {
   const loadCategory = () => {
     return getCategories().then(({ data }) => {
       if (data.error) {
-        setValues({ ...values, error: data.error, success: false });
+        setValues({
+          ...values,
+          error: data.error,
+          success: false,
+          message: "Get category is faild",
+        });
       } else {
         setValues({
           ...values,
@@ -84,40 +102,6 @@ const Category = () => {
     });
   };
 
-  const successMsg = () => {
-    if (success) {
-      return <p className="text-success">Category is created</p>;
-    }
-  };
-
-  const errorMsg = () => {
-    if (error) {
-      return <p className="text-danger">Category is exist!</p>;
-    }
-  };
-
-  const removedMsg = () => {
-    if (removed) {
-      return <p className="text-danger">Category is removed!</p>;
-    }
-  };
-
-  //   const handleListOfCategories = () => {
-  //     getCategories().then((data) => {
-  //       if (data.data.error) {
-  //         setValues({ ...values, error: data.data.error, success: false });
-  //       } else {
-  //         setValues({
-  //           ...values,
-  //           error: false,
-  //           success: true,
-  //           name: "",
-  //           categories: [...data.data],
-  //         });
-  //       }
-  //     });
-  //   };
-
   const deleteConfirm = (slug) => {
     const answer = window.confirm(
       "Are you sure you want to delete this category?"
@@ -125,8 +109,16 @@ const Category = () => {
     if (answer) {
       deleteCategory(slug, getCookie("token")).then((data) => {
         if (data.error) {
-          setValues({ ...values, error: data.error, success: false });
+          handleClick();
+          setValues({
+            ...values,
+            error: data.error,
+            success: false,
+            message: "Delete category is faild",
+            condition: "error",
+          });
         } else {
+          handleClick();
           setValues({
             ...values,
             error: false,
@@ -135,6 +127,8 @@ const Category = () => {
             categories: [],
             reload: !reload,
             removed: !removed,
+            message: "Delete category succesed",
+            condition: "success",
           });
         }
       });
@@ -153,11 +147,20 @@ const Category = () => {
     );
   });
 
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
+
   return (
     <React.Fragment>
-      {successMsg()}
-      {errorMsg()}
-      {removedMsg()}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label className="text-muted">Name: </label>
@@ -170,11 +173,30 @@ const Category = () => {
             name="name"
           />
         </div>
-        <button type="submit" className="btn btn-primary mb-2">
+        <button
+          //   onClick={handleClick}
+          type="submit"
+          className="btn btn-primary mb-2"
+        >
           Add category
         </button>
       </form>
       <div className="">{categoryListItems}</div>
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={`${condition}`}
+          elevation={6}
+          variant="filled"
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };
