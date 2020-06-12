@@ -14,6 +14,7 @@ const authRoutes = require("./routes/auth");
 const userRoutes = require("./routes/user");
 const categoryRoutes = require("./routes/category");
 const tagRoutes = require("./routes/tag");
+const blogRoutes = require("./routes/blog");
 
 connectDB();
 
@@ -34,6 +35,7 @@ app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", tagRoutes);
+app.use("/api", blogRoutes);
 
 const port = process.env.PORT || 8000;
 

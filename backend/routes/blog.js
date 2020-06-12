@@ -8,6 +8,9 @@ const {
   updateBlog,
 } = require("../controllers/blog");
 
+const { runValidation } = require("../validators/index");
+const { blogCreateValidator } = require("../validators/blog");
+
 const {
   requireSignin,
   authMiddleware,
@@ -15,6 +18,10 @@ const {
 } = require("../controllers/auth");
 
 router.route("/").get(getBlogs);
+
+router
+  .route("/blogs")
+  .post(blogCreateValidator, requireSignin, adminMiddleware, createBlog);
 
 router
   .route("/:blogId")
