@@ -5,11 +5,11 @@ exports.blogCreateValidator = [
     .not()
     .isEmpty()
     .trim()
-    .length({ min: 3, max: 160 })
+    .isLength({ min: 3, max: 160 })
     .withMessage("Title is required"),
-  check("body")
-    .not()
-    .isEmpty()
-    .length({ min: 200 })
-    .withMessage("Body is required"),
+//   check("body")
+//     .not()
+//     .isEmpty()
+//     .isLength({ min: 200 })
+//     .withMessage("Body is required"),
 ];

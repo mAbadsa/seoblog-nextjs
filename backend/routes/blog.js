@@ -3,9 +3,10 @@ const router = express.Router();
 
 const {
   getBlogs,
-  getBlog,
-  deleteBlog,
-  updateBlog,
+  createBlog,
+  //   getBlog,
+  //   deleteBlog,
+  //   updateBlog,
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -17,16 +18,21 @@ const {
   adminMiddleware,
 } = require("../controllers/auth");
 
-router.route("/").get(getBlogs);
-
 router
   .route("/blogs")
-  .post(blogCreateValidator, requireSignin, adminMiddleware, createBlog);
+  .get(getBlogs)
+  .post(
+    blogCreateValidator,
+    runValidation,
+    requireSignin,
+    adminMiddleware,
+    createBlog
+  );
 
-router
-  .route("/:blogId")
-  .get(getBlog)
-  .delete(requireSignin, adminMiddleware, deleteBlog)
-  .put(requireSignin, adminMiddleware, updateBlog);
+// router
+//   .route("/:blogId")
+//   .get(getBlog)
+//   .delete(requireSignin, adminMiddleware, deleteBlog)
+//   .put(requireSignin, adminMiddleware, updateBlog);
 
 module.exports = router;

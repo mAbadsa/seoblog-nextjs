@@ -36,7 +36,7 @@ const BlogSchema = new mongoose.Schema(
       { type: mongoose.Schema.ObjectId, ref: "Category", required: true },
     ],
     tags: [{ type: mongoose.Schema.ObjectId, ref: "Tag", required: true }],
-    postedBy: [{ type: mongoose.Schema.ObjectId, ref: "User" }],
+    postedBy: { type: mongoose.Schema.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );
