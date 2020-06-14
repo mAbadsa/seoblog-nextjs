@@ -18,7 +18,7 @@ const uniqueMessage = (error) => {
   return output;
 };
 
-exports.errorHandler = (error) => {
+const errorHandler = (error) => {
   let message = "";
 
   if (error.code) {
@@ -38,3 +38,5 @@ exports.errorHandler = (error) => {
   }
   return message;
 };
+
+module.exports = errorHandler

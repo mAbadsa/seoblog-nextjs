@@ -1,5 +1,5 @@
 const fs = require("fs");
-const express = require("express");
+const mongoose = require("mongoose");
 const slugify = require("slugify");
 const formidable = require("formidable");
 const _ = require("lodash");
@@ -36,7 +36,7 @@ const createBlog = (req, res) => {
         error: "Image could not upload",
       });
     }
-    const { title, body, categories, tag } = fields;
+    const { title, body, categories, tags } = fields;
 
     if (!title || !title.length) {
       return res.status(400).json({
@@ -56,7 +56,7 @@ const createBlog = (req, res) => {
       });
     }
 
-    if (!tag || !tag.length === 0) {
+    if (!tags || !tags.length === 0) {
       return res.status(400).json({
         error: "At least one tag is required",
       });
@@ -69,7 +69,10 @@ const createBlog = (req, res) => {
     blog.mtitle = `${title} | ${process.env.APP_NAME}`;
     blog.mdesc = stripHtml(body.substring(0, 160));
     blog.postedBy = req.user._id;
-    // console.log("line 48:", form);
+
+    let categoriesArray = categories && categories.split(",");
+    let tagsArray = tags && tags.split(",");
+
     if (files.photo) {
       if (files.photo.size === 10000000) {
         return res.status(400).json({
@@ -88,10 +91,35 @@ const createBlog = (req, res) => {
           error: errorHandler(err),
         });
       }
-      res.status(200).json({
-        success: true,
-        data,
-        error: [],
+
+      Blog.findByIdAndUpdate(
+        data._id,
+        { $push: { categories: { $each: categoriesArray } } },
+        { new: true }
+      ).exec((err, blog) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        } else {
+          Blog.findByIdAndUpdate(
+            data._id,
+            { $push: { tags: tagsArray } },
+            { new: true }
+          ).exec((err, blog) => {
+            if (err) {
+              return res.status(400).json({
+                error: errorHandler(err),
+              });
+            } else {
+              res.status(200).json({
+                success: true,
+                data: blog,
+                error: [],
+              });
+            }
+          });
+        }
       });
     });
   });
