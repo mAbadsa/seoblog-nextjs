@@ -29,7 +29,7 @@ const BlogSchema = new mongoose.Schema(
       type: String,
     },
     photo: {
-      type: Buffer,
+      data: Buffer,
       contentType: String,
     },
     categories: [

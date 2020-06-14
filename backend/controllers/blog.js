@@ -1,6 +1,15 @@
+const fs = require("fs");
 const express = require("express");
+const slugify = require("slugify");
+const formidable = require("formidable");
+const _ = require("lodash");
+const stripHtml = require("string-strip-html");
+const errorHandler = require("../helpers/dbHandleError");
+
 const Blog = require("../models/Blog");
 const User = require("../models/User");
+const Category = require("../models/Category");
+const Tag = require("../models/Tag");
 
 const getBlogs = async (req, res) => {
   const blogs = await Blog.find({})
@@ -16,33 +25,76 @@ const getBlogs = async (req, res) => {
   });
 };
 
-const createBlog = async (req, res) => {
-  const { title, body } = req.body;
-  const user = await User.findById({ _id: req.user._id });
+const createBlog = (req, res) => {
+  let form = new formidable.IncomingForm();
+  // console.log(form);
+  form.keepExtensions = true;
+  // console.log("line 32:", form);
+  form.parse(req, (err, fields, files) => {
+    if (err) {
+      return res.status(400).json({
+        error: "Image could not upload",
+      });
+    }
+    const { title, body, categories, tag } = fields;
 
-  if (!user) {
-    res.status(400).json({
-      success: false,
-      data: [],
-      error,
-    });
-  }
+    if (!title || !title.length) {
+      return res.status(400).json({
+        error: "Title is required",
+      });
+    }
 
-  const blog = new Blog({ title, body, postedBy: user._id });
-  try {
-    await blog.save();
-    res.status(200).json({
-      success: true,
-      data: blog,
-      error: [],
+    if (!body || body.length < 200) {
+      return res.status(400).json({
+        error: "Content is too short",
+      });
+    }
+
+    if (!categories || !categories.length === 0) {
+      return res.status(400).json({
+        error: "At least one category is required",
+      });
+    }
+
+    if (!tag || !tag.length === 0) {
+      return res.status(400).json({
+        error: "At least one tag is required",
+      });
+    }
+
+    let blog = new Blog();
+    blog.title = title;
+    blog.body = body;
+    blog.slug = slugify(title).toLowerCase();
+    blog.mtitle = `${title} | ${process.env.APP_NAME}`;
+    blog.mdesc = stripHtml(body.substring(0, 160));
+    blog.postedBy = req.user._id;
+    // console.log("line 48:", form);
+    if (files.photo) {
+      if (files.photo.size === 10000000) {
+        return res.status(400).json({
+          error: "Image should be less than 1mb in size.",
+        });
+      }
+      blog.photo.data = fs.readFileSync(files.photo.path);
+      blog.photo.contentType = files.photo.type;
+      // console.log("Files >>>> ", files);
+    }
+    blog.save((err, data) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          data: [],
+          error: errorHandler(err),
+        });
+      }
+      res.status(200).json({
+        success: true,
+        data,
+        error: [],
+      });
     });
-  } catch (error) {
-    res.status(400).json({
-      success: false,
-      data: [],
-      error,
-    });
-  }
+  });
 };
 
 module.exports = {

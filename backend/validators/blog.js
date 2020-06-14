@@ -7,9 +7,9 @@ exports.blogCreateValidator = [
     .trim()
     .isLength({ min: 3, max: 160 })
     .withMessage("Title is required"),
-//   check("body")
-//     .not()
-//     .isEmpty()
-//     .isLength({ min: 200 })
-//     .withMessage("Body is required"),
+  check("body")
+    .not()
+    .isEmpty()
+    .isLength({ min: 200 })
+    .withMessage("Body is required"),
 ];

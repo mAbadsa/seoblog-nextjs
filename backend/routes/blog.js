@@ -18,16 +18,13 @@ const {
   adminMiddleware,
 } = require("../controllers/auth");
 
-router
-  .route("/blogs")
-  .get(getBlogs)
-  .post(
-    blogCreateValidator,
-    runValidation,
-    requireSignin,
-    adminMiddleware,
-    createBlog
-  );
+router.route("/blogs").get(getBlogs).post(
+  // blogCreateValidator,
+  // runValidation,
+  requireSignin,
+  adminMiddleware,
+  createBlog
+);
 
 // router
 //   .route("/:blogId")
