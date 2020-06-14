@@ -5,6 +5,7 @@ const formidable = require("formidable");
 const _ = require("lodash");
 const stripHtml = require("string-strip-html");
 const errorHandler = require("../helpers/dbHandleError");
+const { smartTrim } = require("../helpers/smartTrim");
 
 const Blog = require("../models/Blog");
 const User = require("../models/User");
@@ -65,6 +66,7 @@ const createBlog = (req, res) => {
     let blog = new Blog();
     blog.title = title;
     blog.body = body;
+    blog.excerpt = smartTrim(body, 200, " ", " ...");
     blog.slug = slugify(title).toLowerCase();
     blog.mtitle = `${title} | ${process.env.APP_NAME}`;
     blog.mdesc = stripHtml(body.substring(0, 160));
