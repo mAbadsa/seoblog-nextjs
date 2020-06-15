@@ -21,17 +21,80 @@ const CreateBlog = ({ router }) => {
     categories: [],
     tags: [],
   });
+
+  const [values, setValues] = useState({
+    error: "",
+    errorSize: "",
+    formData: "",
+    success: "",
+    title: "",
+    hidePublishButton: false,
+  });
+
+  const {
+    error,
+    errorSize,
+    formData,
+    success,
+    // title,
+    hidePublishButton,
+  } = values;
+
+  const {
+    title,
+    body,
+    slug,
+    mtitle,
+    mdesc,
+    excerpt,
+    photo,
+    categories,
+    tags,
+  } = blog;
+
+  const publishBlog = () => {
+    e.preventDefault();
+  };
+
+  const handleChange = (e) => {
+    name = e.target.value;
+  };
+
+  const handleBody = (e) => {};
+
+  const CreateBlogForm = () => {
+    return (
+      <form onSubmit={publishBlog}>
+        <div className="form-group">
+          <label className="text-muted">Title:</label>
+          <input
+            type="text"
+            className="form-control"
+            value={title}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="form-group">
+          <label className="text-muted">Body:</label>
+          <ReactQuill
+            placeholder="Write blog content..."
+            value={body}
+            onChange={handleBody}
+          />
+        </div>
+        <button type="submit" className="btn btn-outline-primary">
+          Publish
+        </button>
+      </form>
+    );
+  };
+
   return (
     <React.Fragment>
       <div className="row py-5">
-        <div className="col-md-12 text-center pb-5">
-          <h1>Create New Blog</h1>
-        </div>
-        <ReactQuill />
-      </div>
-      <div className="row py-5 px-5">
-        <div className="col-md-12">
-          <button className="btn btn-outline-primary">Add</button>
+        <div className="col-md-8 offset-2 pb-5">
+          <h1 className="text-center">Create New Blog</h1>
+          <CreateBlogForm />
         </div>
       </div>
     </React.Fragment>
