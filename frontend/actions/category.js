@@ -1,6 +1,5 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
-import cookie from "js-cookie";
 
 const createCategory = (categoryName, token) => {
   return fetch(`${API}/category`, {
