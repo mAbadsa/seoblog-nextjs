@@ -31,7 +31,7 @@ const listOfCategories = (req, res) => {
 
     res.status(200).json({
       message: "get categories successed",
-      data: categories,
+      categories,
     });
   });
 };

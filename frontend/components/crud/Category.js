@@ -47,7 +47,6 @@ const Category = () => {
   });
 
   const classes = useStyles();
-  console.log(classes.root);
 
   const [open, setOpen] = useState(false);
 
@@ -108,7 +107,7 @@ const Category = () => {
   }, [reload]);
 
   const loadCategory = () => {
-    return getCategories().then(({ data }) => {
+    return getCategories().then((data) => {
       if (data.error) {
         setValues({
           ...values,
@@ -122,7 +121,7 @@ const Category = () => {
           error: false,
           success: false,
           name: "",
-          categories: [...data],
+          categories: data.categories,
           removed: false,
         });
       }

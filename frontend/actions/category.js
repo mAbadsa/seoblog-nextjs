@@ -19,7 +19,7 @@ const getCategories = () => {
   return fetch(`${API}/categories`, {
     method: "GET",
   })
-    .then((res) => res.json())
+    .then((data) => data.json())
     .catch((err) => console.log(err));
 };
 
@@ -35,8 +35,8 @@ const deleteCategory = (slug, token) => {
   return fetch(`${API}/category/${slug}`, {
     method: "DELETE",
     headers: {
-        "Authorization": `Bearer ${token}`
-    }
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));

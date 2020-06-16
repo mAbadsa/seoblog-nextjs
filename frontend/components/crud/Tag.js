@@ -101,7 +101,7 @@ const Tag = () => {
   }, [reload]);
 
   const loadTag = () => {
-    return getTags().then(({ data }) => {
+    return getTags().then((data) => {
       if (data.error) {
         setValues({
           ...values,
@@ -115,7 +115,7 @@ const Tag = () => {
           error: false,
           success: false,
           name: "",
-          tags: [...data],
+          tags: data.tags,
           removed: false,
         });
       }

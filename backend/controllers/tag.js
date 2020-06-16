@@ -12,7 +12,7 @@ const getTags = (req, res) => {
 
     res.status(200).json({
       messgae: "Get tags success",
-      data: tags,
+      tags,
     });
   });
 };
