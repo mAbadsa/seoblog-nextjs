@@ -26,6 +26,7 @@ const CreateBlog = ({ router }) => {
   const [body, setBody] = useState(getLocalStorageItem());
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
+  const [checkedCat, setCheckCat] = useState([]);
 
   const [values, setValues] = useState({
     error: "",
@@ -89,6 +90,25 @@ const CreateBlog = ({ router }) => {
     }
   };
 
+  const handleCatToggle = (id) => () => {
+    setValues({ ...values, error: "" });
+
+    // check category is exist
+    const catCheckedExistIndex = checkedCat.indexOf(id);
+
+    const all = [...checkedCat];
+
+    if (catCheckedExistIndex === -1) {
+      all.push(id);
+    } else {
+      all.splice(catCheckedExistIndex, 1);
+    }
+    console.log(all);
+    setCheckCat(all);
+
+    formData.set("categories", all);
+  };
+
   const CreateBlogForm = () => {
     return (
       <form onSubmit={publishBlog}>
@@ -124,7 +144,11 @@ const CreateBlog = ({ router }) => {
       categories.map((c, i) => {
         return (
           <li className="list-unstyled" key={i}>
-            <input type="checkbox" className="mr-2" />
+            <input
+              onChange={handleCatToggle(c._id)}
+              type="checkbox"
+              className="mr-2"
+            />
             <label className="form-check-label">{c.name}</label>
           </li>
         );
