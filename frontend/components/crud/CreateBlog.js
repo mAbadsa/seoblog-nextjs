@@ -26,7 +26,7 @@ const CreateBlog = ({ router }) => {
   const [body, setBody] = useState(getLocalStorageItem());
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
-  const [checkedCat, setCheckCat] = useState([]);
+  const [checkedTag, setCheckTag] = useState([]);
 
   const [values, setValues] = useState({
     error: "",
@@ -109,6 +109,25 @@ const CreateBlog = ({ router }) => {
     formData.set("categories", all);
   };
 
+  const handleTagToggle = (id) => () => {
+    setValues({ ...values, error: "" });
+
+    // check category is exist
+    const tagCheckedExistIndex = checkedTag.indexOf(id);
+
+    const all = [...checkedTag];
+
+    if (tagCheckedExistIndex === -1) {
+      all.push(id);
+    } else {
+      all.splice(tagCheckedExistIndex, 1);
+    }
+    console.log(all);
+    setCheckTag(all);
+
+    formData.set("tags", all);
+  };
+
   const CreateBlogForm = () => {
     return (
       <form onSubmit={publishBlog}>
@@ -162,7 +181,11 @@ const CreateBlog = ({ router }) => {
       tags.map((t, i) => {
         return (
           <li className="list-unstyled" key={i}>
-            <input type="checkbox" className="mr-2" />
+            <input
+              onChange={handleTagToggle(t._id)}
+              type="checkbox"
+              className="mr-2"
+            />
             <label className="form-check-label">{t.name}</label>
           </li>
         );
@@ -176,9 +199,8 @@ const CreateBlog = ({ router }) => {
         <div className="col-md-8 pb-5">
           <h1 className="text-center">Create New Blog</h1>
           {CreateBlogForm()}
-          {JSON.stringify(title)}
         </div>
-        <div className="col-md-4 bg-primary rounded">
+        <div className="col-md-4 bg-light rounded">
           <div className="pt-2">
             <h5>Categories</h5>
             <Divider />
