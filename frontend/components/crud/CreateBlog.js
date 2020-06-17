@@ -8,12 +8,11 @@ import { getTags } from "../../actions/tag";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
-import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: true });
 import "../../node_modules/react-quill/dist/quill.snow.css";
-import "./createBlog.css";
+// import "./createBlog.css";
 
 const CreateBlog = ({ router }) => {
   const getLocalStorageItem = () => {
@@ -84,44 +83,43 @@ const CreateBlog = ({ router }) => {
   const publishBlog = (e) => {
     e.preventDefault();
     createBlog(formData, getCookie("token")).then((data) => {
-      console.log(formData);
       if (data.error) {
         handleClick();
         setValues({
           ...values,
           error: data.error,
-          message: "An Error occured at create new blog!",
+          message: data.error,
           success: false,
           condition: "error",
         });
       } else {
         handleClick();
         setValues({
-          ...value,
+          ...values,
           title: "",
-          formData: "",
           error: "",
           success: true,
-          message: `A new blog titled ${data.title} is created`,
+          message: `A new blog titled ${data.blog.title} is created`,
           condition: "success",
         });
         setBody("");
-        setCategories([]);
-        setTags([]);
+        // setCategories([]);
+        // setTags([]);
+        setCheckTag([]);
+        setCheckCat([]);
       }
     });
   };
 
   const handleChange = (name) => (e) => {
     const value = name === "photo" ? e.target.files[0] : e.target.value;
-    console.log("Value: ", value);
     formData.set(name, value);
     setValues({ ...values, [name]: value, formData, error: "" });
-    console.log(formData);
   };
 
   const handleBody = (e) => {
     setBody(e);
+    console.log(typeof formData);
     formData.set("body", e);
     if (window !== "undefined") {
       localStorage.setItem("blog", JSON.stringify(e));
@@ -141,13 +139,12 @@ const CreateBlog = ({ router }) => {
     } else {
       all.splice(catCheckedExistIndex, 1);
     }
+    if (all.length === 0) {
+      setValues({...values, condition: "error", message: "Add one category at least"})
+    }
     setCheckCat(all);
 
     formData.set("categories", all);
-    console.log("Toggle: ", formData);
-    console.log("Toggle: ", formData.get("title"));
-    console.log("Toggle: ", formData.get("body"));
-    console.log("Toggle: ", formData.get("photo"));
   };
 
   const handleTagToggle = (id) => () => {
@@ -162,6 +159,9 @@ const CreateBlog = ({ router }) => {
       all.push(id);
     } else {
       all.splice(tagCheckedExistIndex, 1);
+    }
+    if (all.length === 0) {
+      setValues({...values, condition: "error", message: "Add one tag at least"})
     }
     setCheckTag(all);
 

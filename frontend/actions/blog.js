@@ -2,7 +2,6 @@ import fetch from "isomorphic-fetch";
 import { API } from "../config";
 
 const createBlog = (blog, token) => {
-  console.log(blog);
   return fetch(`${API}/blogs`, {
     method: "POST",
     headers: {

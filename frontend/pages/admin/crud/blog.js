@@ -2,7 +2,7 @@ import Layout from "../../../components/Layout";
 import Admin from "../../../components/auth/Admin";
 import CreateBlog from "../../../components/crud/CreateBlog";
 import Link from "next/link";
-import './bg.css'
+// import './bg.css';
 
 const Blog = () => {
   return (
