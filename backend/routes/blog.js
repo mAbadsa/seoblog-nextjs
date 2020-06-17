@@ -27,7 +27,7 @@ router.route("/blogs").get(getBlogs).post(
 );
 
 // router
-//   .route("/:blogId")
+//   .route("/blogs/:slug")
 //   .get(getBlog)
 //   .delete(requireSignin, adminMiddleware, deleteBlog)
 //   .put(requireSignin, adminMiddleware, updateBlog);

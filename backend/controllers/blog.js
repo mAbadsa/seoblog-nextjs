@@ -14,16 +14,27 @@ const Tag = require("../models/Tag");
 
 const getBlogs = async (req, res) => {
   const blogs = await Blog.find({})
-    .populate({ path: "postedBy", select: "name email", options: { limit: 2 } })
+    // .populate({ path: "postedBy", select: "_id name slug", options: { limit: 2 } })
+    .populate("categories", "_id name slug")
+    .populate("tags", "_id name slug")
+    .populate("postedBy", "_id name username")
+    .select(
+      "_id title slug excerpt categories tags postedBy createdAt updatedAt"
+    )
     .exec();
   const count = await Blog.find({}).countDocuments();
-
-  res.json({
-    success: true,
-    count,
-    data: blogs,
-    erorr: [],
-  });
+  try {
+    res.json({
+      success: true,
+      count,
+      data: blogs,
+      erorr: [],
+    });
+  } catch (err) {
+    return res.json({
+      error: errorHandler(err),
+    });
+  }
 };
 
 const createBlog = (req, res) => {
