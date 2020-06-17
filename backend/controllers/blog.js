@@ -38,7 +38,7 @@ const createBlog = (req, res) => {
       });
     }
     const { title, body, categories, tags } = fields;
-
+    console.log("fileds: ", fields);
     if (!title || !title.length) {
       return res.status(400).json({
         error: "Title is required",
@@ -46,6 +46,7 @@ const createBlog = (req, res) => {
     }
 
     if (!body || body.length < 200) {
+      console.log(body.length);
       return res.status(400).json({
         error: "Content is too short",
       });
@@ -76,15 +77,16 @@ const createBlog = (req, res) => {
     let tagsArray = tags && tags.split(",");
 
     if (files.photo) {
-      if (files.photo.size === 10000000) {
+      if (files.photo.size >= 10000000) {
         return res.status(400).json({
           error: "Image should be less than 1mb in size.",
         });
       }
       blog.photo.data = fs.readFileSync(files.photo.path);
       blog.photo.contentType = files.photo.type;
-      // console.log("Files >>>> ", files);
+      console.log("Files >>>> ", files);
     }
+    console.log(blog);
     blog.save((err, data) => {
       if (err) {
         return res.status(400).json({

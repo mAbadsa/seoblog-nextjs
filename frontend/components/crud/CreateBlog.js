@@ -5,6 +5,10 @@ import { createBlog } from "../../actions/blog";
 import { isAuth, getCookie } from "../../actions/auth";
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tag";
+
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import Chip from "@material-ui/core/Chip";
 import Divider from "@material-ui/core/Divider";
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: true });
@@ -26,15 +30,18 @@ const CreateBlog = ({ router }) => {
   const [body, setBody] = useState(getLocalStorageItem());
   const [categories, setCategories] = useState([]);
   const [tags, setTags] = useState([]);
+  const [checkedCat, setCheckCat] = useState([]);
   const [checkedTag, setCheckTag] = useState([]);
-
+  const [open, setOpen] = useState(false);
   const [values, setValues] = useState({
     error: "",
     errorSize: "",
     formData: "",
-    success: "",
+    success: false,
     title: "",
     hidePublishButton: false,
+    message: "",
+    condition: "",
   });
 
   const {
@@ -44,6 +51,8 @@ const CreateBlog = ({ router }) => {
     formData,
     title,
     hidePublishButton,
+    message,
+    condition,
   } = values;
 
   useEffect(() => {
@@ -72,15 +81,43 @@ const CreateBlog = ({ router }) => {
     });
   };
 
-  const publishBlog = () => {
+  const publishBlog = (e) => {
     e.preventDefault();
-    createBlog(formData, getCookie("token"));
+    createBlog(formData, getCookie("token")).then((data) => {
+      console.log(formData);
+      if (data.error) {
+        handleClick();
+        setValues({
+          ...values,
+          error: data.error,
+          message: "An Error occured at create new blog!",
+          success: false,
+          condition: "error",
+        });
+      } else {
+        handleClick();
+        setValues({
+          ...value,
+          title: "",
+          formData: "",
+          error: "",
+          success: true,
+          message: `A new blog titled ${data.title} is created`,
+          condition: "success",
+        });
+        setBody("");
+        setCategories([]);
+        setTags([]);
+      }
+    });
   };
 
   const handleChange = (name) => (e) => {
-    const value = name === "photo" ? e.taget.files[0] : e.target.value;
+    const value = name === "photo" ? e.target.files[0] : e.target.value;
+    console.log("Value: ", value);
     formData.set(name, value);
-    setValues({ ...values, [name]: value, formData });
+    setValues({ ...values, [name]: value, formData, error: "" });
+    console.log(formData);
   };
 
   const handleBody = (e) => {
@@ -107,6 +144,10 @@ const CreateBlog = ({ router }) => {
     setCheckCat(all);
 
     formData.set("categories", all);
+    console.log("Toggle: ", formData);
+    console.log("Toggle: ", formData.get("title"));
+    console.log("Toggle: ", formData.get("body"));
+    console.log("Toggle: ", formData.get("photo"));
   };
 
   const handleTagToggle = (id) => () => {
@@ -125,6 +166,19 @@ const CreateBlog = ({ router }) => {
     setCheckTag(all);
 
     formData.set("tags", all);
+  };
+
+  // Snackbar handling
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   const CreateBlogForm = () => {
@@ -234,6 +288,21 @@ const CreateBlog = ({ router }) => {
           </ul>
         </div>
       </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={2000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity={`${condition}`}
+          elevation={6}
+          variant="filled"
+        >
+          {message}
+        </Alert>
+      </Snackbar>
     </React.Fragment>
   );
 };
