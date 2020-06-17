@@ -74,6 +74,7 @@ const CreateBlog = ({ router }) => {
 
   const publishBlog = () => {
     e.preventDefault();
+    createBlog(formData, getCookie("token"));
   };
 
   const handleChange = (name) => (e) => {
@@ -103,7 +104,6 @@ const CreateBlog = ({ router }) => {
     } else {
       all.splice(catCheckedExistIndex, 1);
     }
-    console.log(all);
     setCheckCat(all);
 
     formData.set("categories", all);
@@ -122,7 +122,6 @@ const CreateBlog = ({ router }) => {
     } else {
       all.splice(tagCheckedExistIndex, 1);
     }
-    console.log(all);
     setCheckTag(all);
 
     formData.set("tags", all);
@@ -201,6 +200,20 @@ const CreateBlog = ({ router }) => {
           {CreateBlogForm()}
         </div>
         <div className="col-md-4 bg-light rounded">
+          <div className="form-group pt-3">
+            <h5>Featured image</h5>
+            <Divider />
+            <small className="text-info">Max size: 1mb</small>
+            <label className="btn btn-outline-primary mt-2">
+              Upload featured image
+              <input
+                onChange={handleChange("photo")}
+                type="file"
+                accept="image/*"
+                hidden
+              />
+            </label>
+          </div>
           <div className="pt-2">
             <h5>Categories</h5>
             <Divider />
