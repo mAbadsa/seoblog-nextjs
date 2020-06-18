@@ -195,22 +195,22 @@ const getBlog = async (req, res) => {
   }
 };
 
-// const deleteBlog = async (req, res) => {
-//   const slug = req.params.slug.toLowerCase();
-//   try {
-//     await Blog.findByIdAndDelete({ slug });
-//     res.status(200).json({
-//       success: true,
-//       message: "Delete blog successed",
-//       data: [],
-//       erorr: [],
-//     });
-//   } catch (error) {
-//     return res.status(400).json({
-//       error: errorHandler(err),
-//     });
-//   }
-// };
+const deleteBlog = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    await Blog.findOneAndDelete({ slug }).exec();
+    res.status(200).json({
+      success: true,
+      message: "Delete blog successed",
+      data: [],
+      erorr: [],
+    });
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler(err),
+    });
+  }
+};
 
 module.exports = {
   getBlogs,
