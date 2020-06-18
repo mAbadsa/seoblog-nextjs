@@ -4,6 +4,7 @@ const router = express.Router();
 const {
   getBlogs,
   createBlog,
+  listAllBlogsCategoriesTags,
   //   getBlog,
   //   deleteBlog,
   //   updateBlog,
@@ -25,6 +26,8 @@ router.route("/blogs").get(getBlogs).post(
   adminMiddleware,
   createBlog
 );
+
+router.route("/blogs-categoies-tags").post(listAllBlogsCategoriesTags);
 
 // router
 //   .route("/blogs/:slug")
