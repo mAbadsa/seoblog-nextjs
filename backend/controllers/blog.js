@@ -138,9 +138,8 @@ const createBlog = (req, res) => {
 };
 
 const listAllBlogsCategoriesTags = async (req, res) => {
-  const limit = req.body.limit ? parseInt(req.body.limit) : 10;
-  const skip = req.body.skip ? parseInt(req.body.skip) : 0;
-
+  const limit = req.params.limit ? parseInt(req.params.limit) : 10;
+  const skip = req.params.skip ? parseInt(req.params.skip) : 0;
   try {
     const blogs = await Blog.find({})
       .populate("categories", "_id name slug")
@@ -155,17 +154,15 @@ const listAllBlogsCategoriesTags = async (req, res) => {
       .exec();
     const categories = await Category.find({}).exec();
     const tags = await Tag.find({}).exec();
-
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
-      count,
       blogs,
       tags,
       categories,
       size: blogs.length,
       erorr: [],
     });
-  } catch (error) {
+  } catch (err) {
     return res.status(400).json({
       error: errorHandler(err),
     });
