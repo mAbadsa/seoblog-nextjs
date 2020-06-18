@@ -5,8 +5,8 @@ const {
   getBlogs,
   createBlog,
   listAllBlogsCategoriesTags,
-  //   getBlog,
-  //   deleteBlog,
+  getBlog,
+  deleteBlog,
   //   updateBlog,
 } = require("../controllers/blog");
 
@@ -29,10 +29,10 @@ router.route("/blogs").get(getBlogs).post(
 
 router.route("/blogs-categoies-tags").post(listAllBlogsCategoriesTags);
 
-// router
-//   .route("/blogs/:slug")
-//   .get(getBlog)
-//   .delete(requireSignin, adminMiddleware, deleteBlog)
+router
+  .route("/blogs/:slug")
+  .get(getBlog)
+  .delete(requireSignin, adminMiddleware, deleteBlog);
 //   .put(requireSignin, adminMiddleware, updateBlog);
 
 module.exports = router;

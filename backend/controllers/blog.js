@@ -138,8 +138,10 @@ const createBlog = (req, res) => {
 };
 
 const listAllBlogsCategoriesTags = async (req, res) => {
-  const limit = req.params.limit ? parseInt(req.params.limit) : 10;
-  const skip = req.params.skip ? parseInt(req.params.skip) : 0;
+  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+  console.log(limit);
+  console.log(skip);
   try {
     const blogs = await Blog.find({})
       .populate("categories", "_id name slug")
@@ -156,10 +158,10 @@ const listAllBlogsCategoriesTags = async (req, res) => {
     const tags = await Tag.find({}).exec();
     res.status(200).json({
       success: true,
-      blogs,
-      tags,
-      categories,
       size: blogs.length,
+      blogs,
+      categories,
+      tags,
       erorr: [],
     });
   } catch (err) {
@@ -169,8 +171,51 @@ const listAllBlogsCategoriesTags = async (req, res) => {
   }
 };
 
+const getBlog = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    const blog = await Blog.findOne({ slug })
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username")
+      .select(
+        "_id title body slug mtitle mdesc excerpt categories tags postedBy createdAt updatedAt"
+      )
+      .exec();
+
+    res.status(200).json({
+      success: true,
+      blog,
+      erorr: [],
+    });
+  } catch (err) {
+    return res.status(400).json({
+      error: errorHandler(err),
+    });
+  }
+};
+
+// const deleteBlog = async (req, res) => {
+//   const slug = req.params.slug.toLowerCase();
+//   try {
+//     await Blog.findByIdAndDelete({ slug });
+//     res.status(200).json({
+//       success: true,
+//       message: "Delete blog successed",
+//       data: [],
+//       erorr: [],
+//     });
+//   } catch (error) {
+//     return res.status(400).json({
+//       error: errorHandler(err),
+//     });
+//   }
+// };
+
 module.exports = {
   getBlogs,
   createBlog,
   listAllBlogsCategoriesTags,
+  getBlog,
+  deleteBlog,
 };
