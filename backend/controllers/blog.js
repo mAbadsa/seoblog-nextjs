@@ -214,8 +214,8 @@ const deleteBlog = async (req, res) => {
   }
 };
 
-const updateBlog = async (req, res) => {
-  let slug = req.params.slug;
+const updateBlog = (req, res) => {
+  let slug = req.params.slug.toLowerCase();
 
   Blog.findOne({ slug }).exec((err, blog) => {
     if (err) {
@@ -280,6 +280,21 @@ const updateBlog = async (req, res) => {
   });
 };
 
+const getPhoto = async (req, res) => {
+  const slug = req.params.slug.toLowerCase();
+  try {
+    const blog = await Blog.findOne({ slug }).select("photo").exec();
+    if (!blog) res.status(404).json({ error: "Blog not found!" });
+    res.set("Content-Type", blog.photo.contentType);
+    res.status(200).json({
+      success: true,
+      photo: blog.photo.data,
+    });
+  } catch (err) {
+    res.status(404).json({ error: "errorHandler(err)" });
+  }
+};
+
 module.exports = {
   getBlogs,
   createBlog,
@@ -287,4 +302,5 @@ module.exports = {
   getBlog,
   deleteBlog,
   updateBlog,
+  getPhoto,
 };

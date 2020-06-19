@@ -8,6 +8,7 @@ const {
   getBlog,
   deleteBlog,
   updateBlog,
+  getPhoto,
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -34,5 +35,7 @@ router
   .get(getBlog)
   .delete(requireSignin, adminMiddleware, deleteBlog)
   .put(requireSignin, adminMiddleware, updateBlog);
+
+router.route("/blogs/photo/:slug").get(getPhoto);
 
 module.exports = router;
