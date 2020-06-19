@@ -11,6 +11,8 @@ const Blog = require("../models/Blog");
 const User = require("../models/User");
 const Category = require("../models/Category");
 const Tag = require("../models/Tag");
+const { trace } = require("console");
+const { findOne } = require("../models/Blog");
 
 const getBlogs = async (req, res) => {
   const blogs = await Blog.find({})
@@ -212,10 +214,77 @@ const deleteBlog = async (req, res) => {
   }
 };
 
+const updateBlog = async (req, res) => {
+  let slug = req.params.slug;
+
+  Blog.findOne({ slug }).exec((err, blog) => {
+    if (err) {
+      return res.status(400).json({
+        error: errorHandler(err),
+      });
+    }
+    let form = new formidable.IncomingForm();
+
+    // console.log(form);
+    form.keepExtensions = true;
+    // console.log("line 32:", form);
+    form.parse(req, (err, fields, files) => {
+      if (err) {
+        return res.status(400).json({
+          error: "Image could not upload",
+        });
+      }
+
+      let slugBeforMerge = blog.slug;
+      blog = _.merge(blog, fields);
+      blog.slug = slugBeforMerge;
+
+      const { desc, body, categories, tags } = fields;
+
+      if (body) {
+        blog.excerpt = smartTrim(body, 200, " ", " ...");
+        blog.mdesc = stripHtml(body.substring(0, 160));
+      }
+
+      if (categories) {
+        blog.categories = categories.split(",");
+      }
+
+      if (tags) {
+        blog.tags = tags.split(",");
+      }
+
+      if (files.photo) {
+        if (files.photo.size >= 10000000) {
+          return res.status(400).json({
+            error: "Image should be less than 1mb in size.",
+          });
+        }
+        blog.photo.data = fs.readFileSync(files.photo.path);
+        blog.photo.contentType = files.photo.type;
+        // console.log("Files >>>> ", files);
+      }
+      blog.save((err, updatedBlog) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+        res.status(202).json({
+          success: true,
+          updatedBlog,
+          erorr: [],
+        });
+      });
+    });
+  });
+};
+
 module.exports = {
   getBlogs,
   createBlog,
   listAllBlogsCategoriesTags,
   getBlog,
   deleteBlog,
+  updateBlog,
 };

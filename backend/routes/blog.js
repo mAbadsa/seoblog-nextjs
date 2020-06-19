@@ -7,7 +7,7 @@ const {
   listAllBlogsCategoriesTags,
   getBlog,
   deleteBlog,
-  //   updateBlog,
+  updateBlog,
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -32,7 +32,7 @@ router.route("/blogs-categoies-tags").post(listAllBlogsCategoriesTags);
 router
   .route("/blogs/:slug")
   .get(getBlog)
-  .delete(requireSignin, adminMiddleware, deleteBlog);
-//   .put(requireSignin, adminMiddleware, updateBlog);
+  .delete(requireSignin, adminMiddleware, deleteBlog)
+  .put(requireSignin, adminMiddleware, updateBlog);
 
 module.exports = router;
