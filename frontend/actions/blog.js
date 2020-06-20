@@ -14,4 +14,23 @@ const createBlog = (blog, token) => {
     .catch((err) => console.log(err));
 };
 
-export { createBlog };
+const listAllBlogsCategoriesTags = async (limit, skip) => {
+  try {
+    const res = await fetch(`${API}/blogs-categoies-tags`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: {
+        limit,
+        skip,
+      },
+    });
+    return res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export { createBlog, listAllBlogsCategoriesTags };

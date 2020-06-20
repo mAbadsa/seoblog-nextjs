@@ -140,8 +140,8 @@ const createBlog = (req, res) => {
 };
 
 const listAllBlogsCategoriesTags = async (req, res) => {
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
-  const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+  const limit = req.body.limit ? parseInt(req.body.limit) : 10;
+  const skip = req.body.skip ? parseInt(req.body.skip) : 0;
   console.log(limit);
   console.log(skip);
   try {
