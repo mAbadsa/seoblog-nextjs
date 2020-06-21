@@ -2,6 +2,7 @@ import Link from "next/link";
 import moment from "moment";
 import renderHtml from "react-render-html";
 import Chip from "@material-ui/core/Chip";
+import { API } from "../../config";
 
 const Card = ({ blog }) => {
   const showCategories = () => {
@@ -62,7 +63,14 @@ const Card = ({ blog }) => {
         </div>
       </div>
       <div className="row">
-        <div className="col-md-3">__IMAGE__</div>
+        <div className="col-md-3">
+          <img
+            className="img img-fluid"
+            src={`${API}/blogs/photo/${blog.slug}`}
+            alt={blog.title}
+            style={{ maxHeight: "150px", width: "auto" }}
+          />
+        </div>
         <div className="col-md-9">
           {" "}
           {renderHtml(blog.excerpt)}

@@ -283,10 +283,10 @@ const updateBlog = (req, res) => {
 const getPhoto = async (req, res) => {
   const slug = req.params.slug.toLowerCase();
   try {
-    const blog = await Blog.findOne({ slug }).select("photo").exec();
+    const blog = await Blog.findOne({ slug }).select("photo");
     if (!blog) res.status(404).json({ error: "Blog not found!" });
-    res.set("Content-Type", blog.photo.contentType);
-    res.status(200).json({
+    await res.set("Content-Type", blog.photo.contentType);
+    return await res.status(200).json({
       success: true,
       photo: blog.photo.data,
     });

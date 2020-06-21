@@ -76,7 +76,6 @@ const Blogs = ({ blogs, tags, categoreis, size }) => {
             <div className="col-md-12 pt-3">{getBlogElm()}</div>
           </div>
         </div>
-        pt-3
       </main>
     </Layout>
   );
