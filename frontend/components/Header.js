@@ -42,6 +42,13 @@ const Header = (props) => {
         <NavbarToggler onClick={toggle} />
         <Collapse isOpen={isOpen} navbar>
           <Nav className="ml-auto" navbar>
+            <>
+              <NavItem>
+                <Link href="/blogs">
+                  <NavLink style={{ cursor: "pointer" }}>Blogs</NavLink>
+                </Link>
+              </NavItem>
+            </>
             {isAuth() && isAuth().role === 0 && (
               <NavItem>
                 <Link href="/user">
