@@ -14,22 +14,23 @@ const createBlog = (blog, token) => {
     .catch((err) => console.log(err));
 };
 
-const listAllBlogsCategoriesTags = async (limit, skip) => {
+const listAllBlogsCategoriesTags = async (limit = 10, skip = 0) => {
   try {
-    const res = await fetch(`${API}/blogs-categoies-tags`, {
+    const res = await fetch(`${API}/blogs-categories-tags`, {
       method: "POST",
       headers: {
         Accept: "application/json",
-        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        // "Content-Type": "application/json",
       },
-      body: {
-        limit,
-        skip,
-      },
+      // body: {
+      //   limit,
+      //   skip,
+      // },
     });
-    return res.json();
-  } catch (error) {
-    console.log(error);
+    return await res.json();
+  } catch (err) {
+    return console.log(err);
   }
 };
 

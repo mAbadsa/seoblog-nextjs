@@ -28,7 +28,7 @@ router.route("/blogs").get(getBlogs).post(
   createBlog
 );
 
-router.route("/blogs-categoies-tags").post(listAllBlogsCategoriesTags);
+router.route("/blogs-categories-tags").post(listAllBlogsCategoriesTags);
 
 router
   .route("/blogs/:slug")

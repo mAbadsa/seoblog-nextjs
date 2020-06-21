@@ -156,9 +156,9 @@ const listAllBlogsCategoriesTags = async (req, res) => {
         "_id title slug excerpt categories tags postedBy createdAt updatedAt"
       )
       .exec();
-    const categories = await Category.find({}).exec();
-    const tags = await Tag.find({}).exec();
-    res.status(200).json({
+    const categories = await Category.find({});
+    const tags = await Tag.find({});
+    return res.status(200).json({
       success: true,
       size: blogs.length,
       blogs,
