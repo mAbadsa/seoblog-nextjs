@@ -34,4 +34,14 @@ const listAllBlogsCategoriesTags = async (limit = 10, skip = 0) => {
   }
 };
 
-export { createBlog, listAllBlogsCategoriesTags };
+const getSingleBlog = async (slug) => {
+  try {
+    const data = await fetch(`${API}/blogs/${slug}`, {});
+    return await data.json();
+  }
+  catch (err) {
+    return console.log(err);
+  }
+};
+
+export { createBlog, listAllBlogsCategoriesTags, getSingleBlog };
