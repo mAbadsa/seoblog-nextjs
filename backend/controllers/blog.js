@@ -11,8 +11,6 @@ const Blog = require("../models/Blog");
 const User = require("../models/User");
 const Category = require("../models/Category");
 const Tag = require("../models/Tag");
-const { trace } = require("console");
-const { findOne } = require("../models/Blog");
 
 const getBlogs = async (req, res) => {
   const blogs = await Blog.find({})
@@ -142,8 +140,6 @@ const createBlog = (req, res) => {
 const listAllBlogsCategoriesTags = async (req, res) => {
   const limit = req.body.limit ? parseInt(req.body.limit) : 10;
   const skip = req.body.skip ? parseInt(req.body.skip) : 0;
-  console.log(limit);
-  console.log(skip);
   try {
     const blogs = await Blog.find({})
       .populate("categories", "_id name slug")
@@ -285,13 +281,10 @@ const getPhoto = async (req, res) => {
   try {
     const blog = await Blog.findOne({ slug }).select("photo");
     if (!blog) res.status(404).json({ error: "Blog not found!" });
-    await res.set("Content-Type", blog.photo.contentType);
-    return await res.status(200).json({
-      success: true,
-      photo: blog.photo.data,
-    });
+    res.set("Content-Type", blog.photo.contentType);
+    return await res.send(blog.photo.data);
   } catch (err) {
-    res.status(404).json({ error: "errorHandler(err)" });
+    res.status(404).json({ error: errorHandler(err) });
   }
 };
 

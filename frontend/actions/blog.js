@@ -21,12 +21,12 @@ const listAllBlogsCategoriesTags = async (limit = 10, skip = 0) => {
       headers: {
         Accept: "application/json",
         "Access-Control-Allow-Origin": "*",
-        // "Content-Type": "application/json",
+        "Content-Type": "application/json",
       },
-      // body: {
-      //   limit,
-      //   skip,
-      // },
+      body: JSON.stringify({
+        limit,
+        skip,
+      }),
     });
     return await res.json();
   } catch (err) {
