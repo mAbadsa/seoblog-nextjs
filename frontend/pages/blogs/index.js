@@ -21,13 +21,19 @@ const Blogs = ({
     return (
       <Head>
         <title>Programming Blog | {APP_NAME}</title>
-        <meta name="description" content={`${blogs[0].mdesc}`} />
+        <meta
+          name="description"
+          content="Programming blogs and tutorials on react node next vue php mongoDB graphql and web development"
+        />
         <link rel="canonical" href={`${DOMAIN_NAME}${router.pathname}`} />
         <meat
           property="og:title"
           content={`Latest web development tutorils | ${APP_NAME}`}
         />
-        <meta property="og:description" content={`${blogs[0].mdesc}`} />
+        <meta
+          property="og:description"
+          content="Programming blogs and tutorials on react node next vue php mongoDB graphql and web development"
+        />
         <meat property="og:type" content="website" />
         <meat property="og:url" content={`${DOMAIN_NAME}${router.pathname}`} />
         <meat property="og:site_name" content={`${APP_NAME}`} />

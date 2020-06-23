@@ -9,7 +9,34 @@ import { API, APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 import Chip from "@material-ui/core/Chip";
 import moment from "moment";
 
-const singleBlog = ({ blog }) => {
+const singleBlog = ({ blog, query }) => {
+  const head = () => {
+    return (
+      <Head>
+        <title>
+          {blog.slug} | {APP_NAME}
+        </title>
+        <meta name="description" content={`${blog.mdesc}`} />
+        <link rel="canonical" href={`${DOMAIN_NAME}/blogs/${query.slug}`} />
+        <meat property="og:title" content={`${blog.title} | ${APP_NAME}`} />
+        <meta property="og:description" content={`${blog.mdesc}`} />
+        <meat property="og:type" content="website" />
+        <meat
+          property="og:url"
+          content={`${DOMAIN_NAME}/blogs/${query.slug}`}
+        />
+        <meat property="og:site_name" content={`${APP_NAME}`} />
+        <meat property="og:image" content={`${API}/blogs/photo/${blog.slug}`} />
+        <meat
+          property="og:image:secure_url"
+          content={`${API}/blogs/photo/${blog.slug}`}
+        />
+        <meat property="og:image:type" content="image/jpg" />
+        <meat property="fb:app_id" content={`${FB_APP_ID}`} />
+      </Head>
+    );
+  };
+
   const showCategories = () => {
     return blog.categories.map((c, i) => {
       return (
@@ -45,6 +72,7 @@ const singleBlog = ({ blog }) => {
   };
   return (
     <React.Fragment>
+      {head()}
       <Layout>
         <main>
           <article>
@@ -59,18 +87,21 @@ const singleBlog = ({ blog }) => {
                 </div>
               </section>
               <section>
-                <p className="lead py-1">
-                  Written by:{" "}
-                  <span className="text-primary">{blog.postedBy.name}</span> |
-                  Published{" "}
-                  <span className="text-primary">
-                    {moment(blog.createdAt).fromNow()}
-                    primary
-                  </span>
-                </p>
-                <div className="py-2 px-5">
-                  {showCategories()}
-                  {showTags()}
+                <div className="container">
+                  <h1 className="display-2 py-3 bg-light">{blog.title}</h1>
+                  <p className="lead py-1">
+                    Written by:{" "}
+                    <span className="text-primary">{blog.postedBy.name}</span> |
+                    Published{" "}
+                    <span className="text-primary">
+                      {moment(blog.createdAt).fromNow()}
+                      primary
+                    </span>
+                  </p>
+                  <div className="py-2 px-5">
+                    {showCategories()}
+                    {showTags()}
+                  </div>
                 </div>
               </section>
               <div className="container">
@@ -102,6 +133,7 @@ singleBlog.getInitialProps = ({ query }) => {
     } else {
       return {
         blog: data.blog,
+        query,
       };
     }
   });
