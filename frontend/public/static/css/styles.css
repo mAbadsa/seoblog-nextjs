@@ -6,3 +6,13 @@
 .ql-editor {
   min-height: 300px;
 }
+
+.featured-img {
+  width: 100%;
+  max-height: 500px;
+  object-fit: cover;
+}
+
+.blog-body div p img {
+  width: 100% !important;
+}
