@@ -1,13 +1,14 @@
 import Head from "next/head";
 import Link from "next/link";
 import { withRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../../components/Layout";
 import renderHtml from "react-render-html";
-import { getSingleBlog } from "../../actions/blog";
+import { getSingleBlog, getRelatedBlogs } from "../../actions/blog";
 import { API, APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 import Chip from "@material-ui/core/Chip";
 import moment from "moment";
+import RelatedBlogsCard from "../../components/blog/RelatedBlogsCard";
 
 const singleBlog = ({ blog, query }) => {
   const head = () => {
@@ -35,6 +36,28 @@ const singleBlog = ({ blog, query }) => {
         <meat property="fb:app_id" content={`${FB_APP_ID}`} />
       </Head>
     );
+  };
+
+  const [relatedBlogs, setRelatedBlogs] = useState([]);
+  const { _id, categories } = blog;
+  const handleRelatedBlogs = async () => {
+    try {
+      const blogsList = await getRelatedBlogs({ _id, categories });
+      setRelatedBlogs(blogsList.blogs);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  useEffect(() => {
+    handleRelatedBlogs();
+  }, []);
+
+  console.log(relatedBlogs);
+  const showRealtedBlogs = () => {
+    return relatedBlogs.map((blog) => {
+      return <RelatedBlogsCard blog={blog} />;
+    });
   };
 
   const showCategories = () => {
@@ -113,8 +136,7 @@ const singleBlog = ({ blog, query }) => {
               </div>
               <div className="container">
                 <h4 className="text-center py-5">Related blogs</h4>
-                <hr />
-                <p>Show related blogs</p>
+                <div className="row">{showRealtedBlogs()}</div>
               </div>
               <div className="container">
                 <h4 className="text-center py-5">Show Comments</h4>
@@ -130,6 +152,7 @@ const singleBlog = ({ blog, query }) => {
 singleBlog.getInitialProps = ({ query }) => {
   return getSingleBlog(query.slug).then((data) => {
     if (data.error) {
+      console.log(data.error);
     } else {
       return {
         blog: data.blog,

@@ -9,6 +9,7 @@ const {
   deleteBlog,
   updateBlog,
   getPhoto,
+  listRelatedBlogs
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -37,5 +38,7 @@ router
   .put(requireSignin, adminMiddleware, updateBlog);
 
 router.route("/blogs/photo/:slug").get(getPhoto);
+
+router.route("/blogs/relatedListBlogs").post(listRelatedBlogs);
 
 module.exports = router;

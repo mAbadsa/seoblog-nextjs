@@ -16,3 +16,13 @@
 .blog-body div p img {
   width: 100% !important;
 }
+
+.blog-excerpt p,
+.blog-excerpt h1,
+.blog-excerpt h2,
+.blog-excerpt h3,
+.blog-excerpt h4,
+.blog-excerpt h5 {
+  font-size: 14px;
+  font-weight: 100;
+}

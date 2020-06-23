@@ -38,10 +38,31 @@ const getSingleBlog = async (slug) => {
   try {
     const data = await fetch(`${API}/blogs/${slug}`, {});
     return await data.json();
-  }
-  catch (err) {
+  } catch (err) {
     return console.log(err);
   }
 };
 
-export { createBlog, listAllBlogsCategoriesTags, getSingleBlog };
+const getRelatedBlogs = async (blog) => {
+  try {
+    const blogs = await fetch(`${API}/blogs/relatedListBlogs`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(blog),
+    });
+    return await blogs.json();
+  } catch (err) {
+    return console.log(err);
+  }
+};
+
+export {
+  createBlog,
+  listAllBlogsCategoriesTags,
+  getSingleBlog,
+  getRelatedBlogs,
+};

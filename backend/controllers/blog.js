@@ -288,6 +288,32 @@ const getPhoto = async (req, res) => {
   }
 };
 
+const listRelatedBlogs = async (req, res) => {
+  const limit = req.body.limit ? parseInt(req.body.limit) : 3;
+
+  const _id = req.body._id;
+  const categories = req.body.categories;
+
+  try {
+    const blogs = await Blog.find({
+      _id: { $ne: _id },
+      categories: { $in: categories },
+    })
+      .limit(limit)
+      .populate("postedBy", "_id name profile")
+      .select("title slug excerpt postedBy createdAt updatedAt")
+      .exec();
+
+    console.log(blogs);
+    res.status(200).json({
+      success: true,
+      blogs,
+    });
+  } catch (err) {
+    res.status(400).json({ error: "Blogs not found" });
+  }
+};
+
 module.exports = {
   getBlogs,
   createBlog,
@@ -296,4 +322,5 @@ module.exports = {
   deleteBlog,
   updateBlog,
   getPhoto,
+  listRelatedBlogs,
 };
