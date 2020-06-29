@@ -41,13 +41,13 @@ const Card = ({ blog }) => {
 
   return (
     <div className="lead pb-4 pl-2 border rounded mb-2">
-      <headers>
+      <header>
         <Link href={`/blogs/${blog.slug}`}>
           <a>
             <h2 className="py-3 font-weight-bold">{blog.title}</h2>
           </a>
         </Link>
-      </headers>
+      </header>
       <section className="">
         <p className="mark ml-1 py-2">
           Written by: <span className="text-success">{blog.postedBy.name}</span>{" "}

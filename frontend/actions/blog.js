@@ -1,6 +1,5 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
-import blog from "../../backend/controllers/blog";
 
 const createBlog = (blog, token) => {
   return fetch(`${API}/blogs`, {
@@ -13,15 +12,6 @@ const createBlog = (blog, token) => {
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));
-};
-
-const getBlogs = async () => {
-  try {
-    const blogs = await fetch(`${API}/blogs`);
-    return await blogs.json();
-  } catch (err) {
-    return console.log(err);
-  }
 };
 
 const listAllBlogsCategoriesTags = async (limit = 10, skip = 0) => {
@@ -70,16 +60,10 @@ const getRelatedBlogs = async (blog) => {
   }
 };
 
-const deleteBlog = async (slug, token) => {
+const getBlogs = async () => {
   try {
-    const res = await fetch(`${API}/blogs/${slug}`, {
-      method: "DELETE",
-      headers: {
-        Accept: "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return await res.json();
+    const blogs = await fetch(`${API}/blogs`);
+    return await blogs.json();
   } catch (err) {
     return console.log(err);
   }
@@ -94,6 +78,21 @@ const updateBlog = async (slug, blog, token) => {
         Authorization: `Bearer ${token}`,
       },
       body: blog,
+    });
+    return await res.json();
+  } catch (err) {
+    return console.log(err);
+  }
+};
+
+const deleteBlog = async (slug, token) => {
+  try {
+    const res = await fetch(`${API}/blogs/${slug}`, {
+      method: "DELETE",
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
     });
     return await res.json();
   } catch (err) {

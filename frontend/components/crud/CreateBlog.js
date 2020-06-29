@@ -5,6 +5,7 @@ import { createBlog } from "../../actions/blog";
 import { isAuth, getCookie } from "../../actions/auth";
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tag";
+import { QuillModules, QuillFormats } from "../../helpers/quill";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -140,7 +141,11 @@ const CreateBlog = ({ router }) => {
       all.splice(catCheckedExistIndex, 1);
     }
     if (all.length === 0) {
-      setValues({...values, condition: "error", message: "Add one category at least"})
+      setValues({
+        ...values,
+        condition: "error",
+        message: "Add one category at least",
+      });
     }
     setCheckCat(all);
 
@@ -161,7 +166,11 @@ const CreateBlog = ({ router }) => {
       all.splice(tagCheckedExistIndex, 1);
     }
     if (all.length === 0) {
-      setValues({...values, condition: "error", message: "Add one tag at least"})
+      setValues({
+        ...values,
+        condition: "error",
+        message: "Add one tag at least",
+      });
     }
     setCheckTag(all);
 
@@ -196,8 +205,8 @@ const CreateBlog = ({ router }) => {
         <div className="form-group">
           <label className="text-muted">Body:</label>
           <ReactQuill
-            modules={CreateBlog.modules}
-            formats={CreateBlog.formats}
+            modules={QuillModules}
+            formats={QuillFormats}
             placeholder="Write blog content..."
             value={body}
             onChange={handleBody}
@@ -306,39 +315,5 @@ const CreateBlog = ({ router }) => {
     </React.Fragment>
   );
 };
-
-CreateBlog.modules = {
-  toolbar: [
-    [{ header: 1 }, { header: 2 }, { header: [3, 4, 5, 6] }, { font: [] }],
-    [{ size: [] }],
-    ["bold", "italic", "underline", "strike", "blockquote"],
-    [
-      { list: "ordered" },
-      { list: "bullet" },
-      { indent: "-1" },
-      { indent: "+1" },
-    ],
-    ["link", "image"],
-    ["clean"],
-  ],
-};
-
-CreateBlog.formats = [
-  "header",
-  "font",
-  "size",
-  "bold",
-  "italic",
-  "underline",
-  "strike",
-  "blockquote",
-  "list",
-  "bullet",
-  "indent",
-  "link",
-  "image",
-  "video",
-  "code-block",
-];
 
 export default withRouter(CreateBlog);

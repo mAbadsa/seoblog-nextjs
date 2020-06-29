@@ -1,5 +1,3 @@
-import CreateBlog from "../components/crud/CreateBlog";
-
 export const QuillModules = {
   toolbar: [
     [{ header: 1 }, { header: 2 }, { header: [3, 4, 5, 6] }, { font: [] }],
@@ -16,7 +14,7 @@ export const QuillModules = {
   ],
 };
 
-export const QuillFormates = [
+export const QuillFormats = [
   "header",
   "font",
   "size",

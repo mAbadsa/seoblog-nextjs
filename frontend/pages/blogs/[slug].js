@@ -53,7 +53,6 @@ const singleBlog = ({ blog, query }) => {
     handleRelatedBlogs();
   }, []);
 
-  console.log(relatedBlogs);
   const showRealtedBlogs = () => {
     return relatedBlogs.map((blog) => {
       return <RelatedBlogsCard blog={blog} />;

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import dynamic from "next/dynamic";
-import { getBlogs, deleteBlog, updateBlog } from "../../actions/blog";
+import { getBlogs, deleteBlog } from "../../actions/blog";
 import { isAuth, getCookie } from "../../actions/auth";
 
 import Snackbar from "@material-ui/core/Snackbar";
@@ -10,15 +10,16 @@ import Divider from "@material-ui/core/Divider";
 
 import moment from "moment";
 
-const BlogRead = () => {
+const ReadBlog = () => {
   const [blogs, setBlogs] = useState([]);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
+
   const token = getCookie("token");
 
   useEffect(() => {
     loadBlogs();
-  }, []);
+  }, [blogs]);
 
   const loadBlogs = async () => {
     try {
@@ -29,6 +30,7 @@ const BlogRead = () => {
     }
   };
 
+  // Delete Blog from DataBase
   const deleteConfirm = async (slug) => {
     const answer = window.confirm(
       "Are you sure you want to delete your blogs?"
@@ -46,6 +48,7 @@ const BlogRead = () => {
     }
   };
 
+  // Show update blog button in DOM
   function showUpdateButton(slug) {
     if (isAuth() && isAuth().role === 0) {
       return (
@@ -64,6 +67,7 @@ const BlogRead = () => {
     }
   }
 
+  // Show Blogs in DOM
   const showBlogs = () => {
     return blogs
       .map((blog, i) => {
@@ -115,8 +119,8 @@ const BlogRead = () => {
       <div className="row py-5 bg-light">
         <div className="col-md-12">
           <ul className="list-group">
-            {/* {blogs.length > 0 ? showBlogs() : <h5>No Blogs...</h5>} */}
             {showBlogs()}
+            <pre>{JSON.stringify(blogs, null, 4)}</pre>
           </ul>
         </div>
       </div>
@@ -139,4 +143,4 @@ const BlogRead = () => {
   );
 };
 
-export default BlogRead;
+export default ReadBlog;

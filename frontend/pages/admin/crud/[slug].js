@@ -1,7 +1,9 @@
 import Layout from "../../../components/Layout";
 import Admin from "../../../components/auth/Admin";
+import UpdateBlog from "../../../components/crud/UpdateBlog";
 import Link from "next/link";
-import ReadBlog from "../../../components/crud/ReadBlog";
+import { withRouter } from "next/router";
+// import './bg.css';
 
 const Blog = () => {
   return (
@@ -9,8 +11,7 @@ const Blog = () => {
       <Admin>
         <div className="row py-5 px-5 bg">
           <div className="col-md-12">
-            <h2>Update Page</h2>
-            <ReadBlog />
+            <UpdateBlog />
           </div>
         </div>
       </Admin>

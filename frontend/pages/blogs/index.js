@@ -194,7 +194,6 @@ const Blogs = ({
           </div>
           <div className="container-fluid">
             <div className="row">
-              {/* <div className="col-md-12 pt-3">In here we will show all blogs</div> */}
               <div className="col-md-12 pt-3">
                 {getInitElm()}
                 {showLoadedBlogs()}

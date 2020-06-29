@@ -1,137 +1,310 @@
-// import { useState, useEffect, useRef } from "react";
-// import dynamic from "next/dynamic";
-// import { withRouter } from "next/router";
-// import { getSingleBlog, getBlogs } from "../../actions/blog";
-// import { isAuth, getCookie } from "../../actions/auth";
-// import { getCategories } from "../../actions/category";
-// import { getTags } from "../../actions/tag";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
+import { withRouter } from "next/router";
+import { getSingleBlog } from "../../actions/blog";
+import { isAuth, getCookie } from "../../actions/auth";
+import { getCategories } from "../../actions/category";
+import { getTags } from "../../actions/tag";
+import { QuillModules, QuillFormats } from "../../helpers/quill";
 
-// import Snackbar from "@material-ui/core/Snackbar";
-// import Alert from "@material-ui/lab/Alert";
-// import Divider from "@material-ui/core/Divider";
+import Snackbar from "@material-ui/core/Snackbar";
+import Alert from "@material-ui/lab/Alert";
+import Divider from "@material-ui/core/Divider";
 
-// const ReactQuill = dynamic(() => import("react-quill"), { ssr: true });
-// import "../../node_modules/react-quill/dist/quill.snow.css";
-// import { QuillModules, QuillFormates } from "../../helpers/quill";
+const Spiner = () => {
+  return (
+    <div className="text-center">
+      <p>LOADING...</p>
+    </div>
+  );
+};
 
-// const UpdateBLog = ({ router }) => {
-//   // const reactQuillRef = useRef("");
-//   // const editor = reactQuillRef.getEditor();
-//   // const unprivilegedEditor = reactQuillRef.makeUnprivilegedEditor(editor);
+const ReactQuill = dynamic(() => import("react-quill"), {
+  ssr: true,
+  loading: () => <Spiner />,
+});
+import "../../node_modules/react-quill/dist/quill.snow.css";
 
-//   const [values, setValues] = useState({
-//     error: "",
-//     success: false,
-//     title: "",
-//     formData: "",
-//     message: "",
-//   });
-//   const [body, setBody] = useState("");
-//   const [open, setOpen] = useState(false);
+const UpdateBlog = ({ router }) => {
+  const [values, setValues] = useState({
+    error: "",
+    success: false,
+    title: "",
+    formData: "",
+    message: "",
+  });
+  const [body, setBody] = useState("");
+  const [open, setOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [checkedCat, setCheckCat] = useState([]);
+  const [checkedTag, setCheckTag] = useState([]);
 
-//   const { error, success, title, formData, message } = values;
+  const { error, success, title, formData, message } = values;
 
-//   useEffect(() => {
-//     setValues({ ...values, formData: new FormData() });
-//     getInitBlog();
-//   }, [router]);
+  useEffect(() => {
+    setValues({ ...values, formData: new FormData() });
+    getInitBlog();
+    initCategories();
+    initTags();
+  }, [router]);
 
-//   const getInitBlog = async () => {
-//     if (router.query.slug) {
-//       try {
-//         const { blog } = await getSingleBlog(router.query.slug);
-//         setValues({ ...values, title: blog.title });
-//         setBody(blog.body);
-//       } catch (err) {
-//         console.log(err);
-//       }
-//     }
-//   };
+  const getInitBlog = async () => {
+    if (router.query.slug) {
+      try {
+        const { blog } = await getSingleBlog(router.query.slug);
+        setValues({ ...values, title: blog.title });
+        setBody(blog.body);
+        setCategoriesArray(data.categories);
+        setTagsArray(data.tags);
+      } catch (err) {
+        console.log(err);
+      }
+    }
+  };
 
-//   const editBlog = () => {};
+  const setCategoriesArray = (blogCategories) => {
+    let categoriesIdArray = [];
+    blogCategories.map((c, i) => {
+      categoriesIdArray.push(c._id);
+    });
+    setCheckCat(categoriesIdArray);
+  };
+  const setTagsArray = (blogTags) => {
+    let tagsIdArray = [];
+    blogTags.map((t, i) => {
+      tagsIdArray.push(t._id);
+    });
+    setCheckTag(tagsIdArray);
+  };
 
-//   const handleChange = (name) => (e) => {
-//     const value = name === "photo" ? e.target.files[0] : e.target.value;
-//     formData.set(name, value);
-//     setValues({ ...values, formData, [name]: value, error: "" });
-//   };
+  const initCategories = async () => {
+    const data = await getCategories();
+    if (data.error) {
+      setValues({ ...values, error: data.error });
+    } else {
+      setCategories(data.categories);
+    }
+  };
 
-//   const handleBody = (e) => {
-//     setBody(e);
-//     formData.set("body", e);
-//   };
+  const initTags = async () => {
+    try {
+      const data = await getTags();
+      setTags(data.tags);
+      console.log(data.tags);
+    } catch (error) {
+      console.log(error);
+      setValues({ ...values, error: data.error });
+    }
+  };
 
-//   const UpdateBlogForm = () => {
-//     return (
-//       <form onSubmit={editBlog}>
-//         <div className="form-group">
-//           <label className="text-muted">Title:</label>
-//           <input
-//             type="text"
-//             className="form-control"
-//             value={title}
-//             onChange={handleChange("title")}
-//           />
-//         </div>
-//         <div className="form-group">
-//           <ReactQuill
-//             // ref={reactQuillRef}
-//             modules={QuillModules}
-//             formats={QuillFormates}
-//             value={body}
-//             onChange={handleBody}
-//             placeholder="Write blog content..."
-//           />
-//         </div>
-//         <button type="submit" className="btn btn-outline-primary">
-//           Update
-//         </button>
-//       </form>
-//     );
-//   };
+  const editBlog = () => {};
 
-//   // Snackbar handling
-//   const handleClick = () => {
-//     setOpen(true);
-//   };
+  const handleChange = (name) => (e) => {
+    const value = name === "photo" ? e.target.files[0] : e.target.value;
+    formData.set(name, value);
+    setValues({ ...values, formData, [name]: value, error: "" });
+  };
 
-//   const handleClose = (event, reason) => {
-//     if (reason === "clickaway") {
-//       return;
-//     }
-//     setOpen(false);
-//   };
+  const handleBody = (e) => {
+    setBody(e);
+    formData.set("body", e);
+  };
 
-//   return (
-//     <React.Fragment>
-//       <div className="row py-5 bg-form-box px-2">
-//         <div className="col-md-8 pb-5">
-//           <h1 className="text-center">Update Blog</h1>
-//           {UpdateBlogForm()}
-//         </div>
-//         <div className="col-md-4 bg-light rounded">
-//           <div className="form-group pt-3">
-//             <h5>Featured image</h5>
-//           </div>
-//         </div>
-//       </div>
-//       <Snackbar
-//         open={open}
-//         autoHideDuration={5000}
-//         onClose={handleClose}
-//         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
-//       >
-//         <Alert
-//           onClose={handleClose}
-//           severity="success"
-//           elevation={6}
-//           variant="filled"
-//         >
-//           {message}
-//         </Alert>
-//       </Snackbar>
-//     </React.Fragment>
-//   );
-// };
+  const handleCatToggle = (id) => () => {
+    setValues({ ...values, error: "" });
 
-// export default withRouter(UpdateBLog);
+    // check category is exist
+    const catCheckedExistIndex = checkedCat.indexOf(id);
+
+    const all = [...checkedCat];
+
+    if (catCheckedExistIndex === -1) {
+      all.push(id);
+    } else {
+      all.splice(catCheckedExistIndex, 1);
+    }
+    if (all.length === 0) {
+      setValues({
+        ...values,
+        condition: "error",
+        message: "Add one category at least",
+      });
+    }
+    setCheckCat(all);
+
+    formData.set("categories", all);
+  };
+
+  const handleTagToggle = (id) => () => {
+    setValues({ ...values, error: "" });
+
+    // check category is exist
+    const tagCheckedExistIndex = checkedTag.indexOf(id);
+
+    const all = [...checkedTag];
+
+    if (tagCheckedExistIndex === -1) {
+      all.push(id);
+    } else {
+      all.splice(tagCheckedExistIndex, 1);
+    }
+    if (all.length === 0) {
+      setValues({
+        ...values,
+        condition: "error",
+        message: "Add one tag at least",
+      });
+    }
+    setCheckTag(all);
+
+    formData.set("tags", all);
+  };
+
+  const showCategories = () => {
+    return (
+      categories &&
+      categories.map((c, i) => {
+        return (
+          <li className="list-unstyled" key={i}>
+            <input
+              onChange={handleCatToggle(c._id)}
+              type="checkbox"
+              className="mr-2"
+            />
+            <label className="form-check-label">{c.name}</label>
+          </li>
+        );
+      })
+    );
+  };
+
+  const showTags = () => {
+    return (
+      tags &&
+      tags.map((t, i) => {
+        return (
+          <li className="list-unstyled" key={i}>
+            <input
+              onChange={handleTagToggle(t._id)}
+              checked={tags.indexOf(t._id) === -1 ? false : true}
+              type="checkbox"
+              className="mr-2"
+            />
+            <label className="form-check-label">{t.name}</label>
+          </li>
+        );
+      })
+    );
+  };
+
+  const UpdateBlogForm = () => {
+    return (
+      <form onSubmit={editBlog}>
+        <div className="form-group">
+          <label className="text-muted">Title:</label>
+          <input
+            type="text"
+            className="form-control"
+            value={title}
+            onChange={handleChange("title")}
+          />
+        </div>
+        <div className="form-group">
+          <ReactQuill
+            modules={QuillModules}
+            formats={QuillFormats}
+            value={body}
+            onChange={handleBody}
+            placeholder="Write blog content..."
+          />
+        </div>
+        <button type="submit" className="btn btn-outline-primary">
+          Update
+        </button>
+      </form>
+    );
+  };
+
+  // Snackbar handling
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+    setOpen(false);
+  };
+  return (
+    <React.Fragment>
+      <div className="row py-5 bg-form-box px-2">
+        <div className="col-md-8 pb-5">
+          <h1 className="text-center">Update Blog</h1>
+          {UpdateBlogForm()}
+        </div>
+        <div className="col-md-4 bg-light rounded">
+          <div className="form-group pt-3">
+            <h5>Featured image</h5>
+            <Divider />
+            <small className="text-info">Max size: 1mb</small>
+            <label className="btn btn-outline-primary mt-2">
+              Upload featured image
+              <input
+                onChange={handleChange("photo")}
+                type="file"
+                accept="image/*"
+                hidden
+              />
+            </label>
+          </div>
+          <div className="pt-2">
+            <h5>Categories</h5>
+            <Divider />
+            <ul
+              className="pt-2"
+              style={{ maxHeight: "200px", overflowY: "scroll" }}
+            >
+              {showCategories()}
+            </ul>
+          </div>
+          <h5>Tags</h5>
+          <Divider />
+          <ul
+            className="pt-2"
+            style={{ maxHeight: "200px", overflowY: "scroll" }}
+          >
+            {showTags()}
+          </ul>
+        </div>
+        <pre style={{ backgroundColor: "#852532" }}>
+          {JSON.stringify(categories, null, 2)}
+        </pre>
+        <pre style={{ backgroundColor: "#159592" }}>
+          {JSON.stringify(tags, null, 2)}
+        </pre>
+        <pre style={{ backgroundColor: "#ff2532" }}>
+          {JSON.stringify(tags, null, 2)}
+        </pre>
+      </div>
+      <Snackbar
+        open={open}
+        autoHideDuration={5000}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          elevation={6}
+          variant="filled"
+        >
+          {message}
+        </Alert>
+      </Snackbar>
+    </React.Fragment>
+  );
+};
+
+export default withRouter(UpdateBlog);
