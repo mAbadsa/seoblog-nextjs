@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
+import Router from "next/router";
 import { withRouter } from "next/router";
-import { getSingleBlog } from "../../actions/blog";
+import { getSingleBlog, updateBlog } from "../../actions/blog";
 import { isAuth, getCookie } from "../../actions/auth";
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tag";
@@ -41,6 +42,7 @@ const UpdateBlog = ({ router }) => {
   const [checkedTag, setCheckTag] = useState([]);
 
   const { error, success, title, formData, message } = values;
+  const token = getCookie("token");
 
   useEffect(() => {
     setValues({ ...values, formData: new FormData() });
@@ -55,10 +57,11 @@ const UpdateBlog = ({ router }) => {
         const { blog } = await getSingleBlog(router.query.slug);
         setValues({ ...values, title: blog.title });
         setBody(blog.body);
-        setCategoriesArray(data.categories);
-        setTagsArray(data.tags);
+        setCategoriesArray(blog.categories);
+        setTagsArray(blog.tags);
       } catch (err) {
         console.log(err);
+        setValues({ ...values, error: err, message: "Error occurred" });
       }
     }
   };
@@ -91,14 +94,35 @@ const UpdateBlog = ({ router }) => {
     try {
       const data = await getTags();
       setTags(data.tags);
-      console.log(data.tags);
     } catch (error) {
       console.log(error);
       setValues({ ...values, error: data.error });
     }
   };
 
-  const editBlog = () => {};
+  const editBlog = (e) => {
+    e.preventDefault();
+    try {
+      const updatedBlog = updateBlog(router.query.slug, formData, token);
+      setValues({
+        ...values,
+        message: `Update blog with title ${updatedBlog.title} successed`,
+        success: true,
+      });
+      if (isAuth() && isAuth().role === 1) {
+        Router.replace(`/blogs/${router.query.slug}`);
+      } else if (isAuth() && isAuth().role === 0) {
+        Router.replace(`/user/crud/${router.query.slug}`);
+      }
+    } catch (err) {
+      setValues({
+        ...values,
+        error: err,
+        message: "Error occurred",
+        success: false,
+      });
+    }
+  };
 
   const handleChange = (name) => (e) => {
     const value = name === "photo" ? e.target.files[0] : e.target.value;
@@ -169,6 +193,7 @@ const UpdateBlog = ({ router }) => {
           <li className="list-unstyled" key={i}>
             <input
               onChange={handleCatToggle(c._id)}
+              checked={checkedCat.indexOf(c._id) === -1 ? false : true}
               type="checkbox"
               className="mr-2"
             />
@@ -187,7 +212,7 @@ const UpdateBlog = ({ router }) => {
           <li className="list-unstyled" key={i}>
             <input
               onChange={handleTagToggle(t._id)}
-              checked={tags.indexOf(t._id) === -1 ? false : true}
+              checked={checkedTag.indexOf(t._id) === -1 ? false : true}
               type="checkbox"
               className="mr-2"
             />
@@ -296,7 +321,7 @@ const UpdateBlog = ({ router }) => {
       >
         <Alert
           onClose={handleClose}
-          severity="success"
+          severity={success ? "success" : "error"}
           elevation={6}
           variant="filled"
         >
