@@ -109,8 +109,9 @@ const UpdateBlog = ({ router }) => {
         message: `Update blog with title ${updatedBlog.title} successed`,
         success: true,
       });
+      handleClick();
       if (isAuth() && isAuth().role === 1) {
-        Router.replace(`/blogs/${router.query.slug}`);
+        Router.replace(`/admin/crud/blogs`);
       } else if (isAuth() && isAuth().role === 0) {
         Router.replace(`/user/crud/${router.query.slug}`);
       }
@@ -121,6 +122,7 @@ const UpdateBlog = ({ router }) => {
         message: "Error occurred",
         success: false,
       });
+      handleClick();
     }
   };
 
