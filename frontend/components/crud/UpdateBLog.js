@@ -7,6 +7,7 @@ import { isAuth, getCookie } from "../../actions/auth";
 import { getCategories } from "../../actions/category";
 import { getTags } from "../../actions/tag";
 import { QuillModules, QuillFormats } from "../../helpers/quill";
+import { API } from "../../config";
 
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -275,7 +276,9 @@ const UpdateBlog = ({ router }) => {
           <div className="form-group pt-3">
             <h5>Featured image</h5>
             <Divider />
-            <small className="text-info">Max size: 1mb</small>
+            <div>
+              <small className="text-info">Max size: 1mb</small>
+            </div>
             <label className="btn btn-outline-primary mt-2">
               Upload featured image
               <input
@@ -283,6 +286,13 @@ const UpdateBlog = ({ router }) => {
                 type="file"
                 accept="image/*"
                 hidden
+              />
+            </label>
+            <label className="d-block">
+              <img
+                className=""
+                style={{ maxHeight: "50px" }}
+                src={`${API}/blogs/photo/${router.query.slug}`}
               />
             </label>
           </div>

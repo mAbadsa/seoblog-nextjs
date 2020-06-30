@@ -62,7 +62,7 @@ const SigninComponent = () => {
   const signinForm = () => {
     return (
       <div className="container">
-        <h1 className="my-3 pb-3 text-center">Signup</h1>
+        <h1 className="my-3 pb-3 text-center text-primary">Signin</h1>
         <div className="row">
           <div className="col-md-6 offset-3">
             <form onSubmit={handleSubmit}>
