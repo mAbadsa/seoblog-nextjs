@@ -109,7 +109,7 @@ const Blogs = ({
               className=""
               label={c.name}
               color="primary"
-              variant="outlined"
+              // variant="outlined"
             />
           </a>
         </Link>
@@ -124,7 +124,7 @@ const Blogs = ({
           <a className="mr-1 my-1">
             <Chip
               className=""
-              label={t.name}
+              label={`#${t.name}`}
               color="primary"
               variant="outlined"
             />
@@ -177,15 +177,15 @@ const Blogs = ({
         <main>
           <div className="container-fluid">
             <header>
-              <div className="col-md-12 pt-3">
+              <div className="col-md-12 pt-5">
                 <h1 className="display-4 font-weight-bold text-center">
                   Programming blogs and tutorials
                 </h1>
-                <section className="container-fluid">
-                  <div className="row py-3 justify-content-center">
+                <section className="container-fluid pt-4">
+                  <div className="row py-2 justify-content-center">
                     <div className="col-md-8 offset-2">{showCategories()}</div>
                   </div>
-                  <div className="row py-3 justify-content-center">
+                  <div className="row py-2 justify-content-center">
                     <div className="col-md-8 offset-2">{showTags()}</div>
                   </div>
                 </section>
