@@ -1,8 +1,9 @@
 import Head from "next/head";
+
 import { getCategory } from "../../actions/category";
 import Card from "../../components/blog/Card";
-
 import Layout from "../../components/Layout";
+import { APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 
 const Category = ({ query, category, blogs }) => {
   const head = () => {
@@ -30,7 +31,10 @@ const Category = ({ query, category, blogs }) => {
           content={`${DOMAIN_NAME}/categories/${query.slug}`}
         />
         <meat property="og:site_name" content={`${APP_NAME}`} />
-        <meat property="og:image" content={`${API}/blogs/photo/${blog.slug}`} />
+        <meat
+          property="og:image"
+          content={`${DOMAIN_NAME}/static/images/seoblog.jpg`}
+        />
         <meat
           property="og:image:secure_url"
           content={`${DOMAIN_NAME}/static/images/seoblog.jpg`}
@@ -69,7 +73,6 @@ const Category = ({ query, category, blogs }) => {
 Category.getInitialProps = async ({ query }) => {
   try {
     const data = await getCategory(query.slug);
-    console.log(data);
     return { category: data.category, blogs: data.blogs, query };
   } catch (err) {
     console.log(err);
