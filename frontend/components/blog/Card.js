@@ -14,7 +14,7 @@ const Card = ({ blog }) => {
               className=""
               label={c.name}
               color="primary"
-              variant="outlined"
+              // variant="outlined"
             />
           </a>
         </Link>
@@ -29,7 +29,7 @@ const Card = ({ blog }) => {
           <a className="mr-1">
             <Chip
               className=""
-              label={t.name}
+              label={`#${t.name}`}
               color="primary"
               variant="outlined"
             />
@@ -55,10 +55,10 @@ const Card = ({ blog }) => {
         </p>
       </section>
       <div className="row my-0 mx-0">
-        <div className="col-md-4 my-1 bg-light py-2 border rounded">
+        <div className="my-1 py-2">
           {showCategories()}
         </div>
-        <div className="col-md-4 my-1 bg-light ml-1 py-2 border rounded">
+        <div className="my-1 ml-1 py-2">
           {showTags()}
         </div>
       </div>
