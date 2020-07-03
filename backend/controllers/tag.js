@@ -1,6 +1,7 @@
 const slugify = require("slugify");
 const Tag = require("../models/Tag");
 const { errorHandler } = require("../helpers/dbHandleError");
+const Blog = require("../models/Blog");
 
 const getTags = (req, res) => {
   Tag.find().exec((err, tags) => {
@@ -46,10 +47,26 @@ const getTag = (req, res) => {
       });
     }
 
-    res.status(200).json({
-      messgae: "Get the tag success",
-      data: tag,
-    });
+    Blog.find({ tags: tag })
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name")
+      .select(
+        "_id title slug excerpt categories tags postedBy createdAt updatedAt"
+      )
+      .exec((err, data) => {
+        if (err) {
+          return res.status(400).json({
+            error: errorHandler(err),
+          });
+        }
+
+        res.status(200).json({
+          messgae: "Get the tag success",
+          tag,
+          blogs: data,
+        });
+      });
   });
 };
 
