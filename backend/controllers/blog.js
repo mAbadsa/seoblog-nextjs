@@ -314,6 +314,28 @@ const listRelatedBlogs = async (req, res) => {
   }
 };
 
+const blogsSearch = async (req, res) => {
+  const { search } = req.query;
+  let blogs;
+  try {
+    if (search) {
+      blogs = await Blog.find({
+        $or: [
+          { title: { $regex: search, $option: "i" } },
+          { body: { $regex: search, $option: "i" } },
+        ],
+      }).select("-photo -body");
+
+      res.status(200).json({
+        success: true,
+        blogs,
+      });
+    }
+  } catch (err) {
+    res.status(400).json({ error: errorHandler(err) });
+  }
+};
+
 module.exports = {
   getBlogs,
   createBlog,
@@ -323,4 +345,5 @@ module.exports = {
   updateBlog,
   getPhoto,
   listRelatedBlogs,
+  blogsSearch,
 };

@@ -9,7 +9,8 @@ const {
   deleteBlog,
   updateBlog,
   getPhoto,
-  listRelatedBlogs
+  listRelatedBlogs,
+  blogsSearch
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -40,5 +41,7 @@ router
 router.route("/blogs/photo/:slug").get(getPhoto);
 
 router.route("/blogs/relatedListBlogs").post(listRelatedBlogs);
+
+router.route("/blogs/search").get(blogsSearch);
 
 module.exports = router;
