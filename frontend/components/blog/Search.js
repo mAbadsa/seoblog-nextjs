@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { searchList } from "../../actions/blog";
 
 const Search = () => {
@@ -19,6 +20,7 @@ const Search = () => {
         ...values,
         results: data,
         message: `${data.length} blogs found`,
+        searched: true,
       });
       console.log(data);
     });
@@ -71,10 +73,32 @@ const Search = () => {
     );
   };
 
+  const searchedBlog = (results = []) => {
+    return (
+      <div className="jumbotron bg-white">
+        {message && <p className="pt-4 text-muted font-italic">{message}</p>}
+        {results.map((blog, i) => {
+          return (
+            <div key={i}>
+              <Link href={`/blogs/${blog.slug}`}>
+                <a className="text-primary">{blog.title}</a>
+              </Link>
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <React.Fragment>
       <div className="container-fluid">
         <div className="pt-3 pb-5">{formSearch()}</div>
+        {searched && (
+          <div style={{ marginBottom: "-80px", marginTop: "-120px" }}>
+            {searchedBlog(results)}
+          </div>
+        )}
       </div>
     </React.Fragment>
   );
