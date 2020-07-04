@@ -1,5 +1,6 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
+import queryString from "query-string";
 
 const createBlog = (blog, token) => {
   return fetch(`${API}/blogs`, {
@@ -100,6 +101,18 @@ const deleteBlog = async (slug, token) => {
   }
 };
 
+const searchList = async (params) => {
+  let query = queryString.stringify(params);
+  try {
+    const blogs = await fetch(`${API}/blog/search?${query}`);
+    if (blogs.ok) {
+      return blogs.json();
+    }
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 export {
   createBlog,
   listAllBlogsCategoriesTags,
@@ -108,4 +121,5 @@ export {
   getBlogs,
   deleteBlog,
   updateBlog,
+  searchList,
 };

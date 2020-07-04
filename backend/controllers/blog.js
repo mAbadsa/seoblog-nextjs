@@ -170,6 +170,7 @@ const listAllBlogsCategoriesTags = async (req, res) => {
 };
 
 const getBlog = async (req, res) => {
+  console.log("Heloooooo");
   const slug = req.params.slug.toLowerCase();
   try {
     const blog = await Blog.findOne({ slug })
@@ -315,24 +316,26 @@ const listRelatedBlogs = async (req, res) => {
 };
 
 const blogsSearch = async (req, res) => {
-  const { search } = req.query;
-  let blogs;
-  try {
-    if (search) {
-      blogs = await Blog.find({
+  console.log("Blogs Search");
+  const search = req.query.search;
+  console.log(req.query);
+  console.log("search ", search);
+  if (search) {
+    try {
+      const blogs = await Blog.find({
         $or: [
-          { title: { $regex: search, $option: "i" } },
-          { body: { $regex: search, $option: "i" } },
+          { title: { $regex: search, $options: "i" } },
+          { body: { $regex: search, $options: "i" } },
         ],
       }).select("-photo -body");
-
-      res.status(200).json({
-        success: true,
-        blogs,
-      });
+      return res.json(blogs);
+      // return res.status(200).json({
+      //   success: false,
+      //   blogs,
+      // });
+    } catch (err) {
+      return res.status(400).json({ error: errorHandler(err) });
     }
-  } catch (err) {
-    res.status(400).json({ error: errorHandler(err) });
   }
 };
 

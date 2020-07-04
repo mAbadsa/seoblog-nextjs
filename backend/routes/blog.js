@@ -10,7 +10,7 @@ const {
   updateBlog,
   getPhoto,
   listRelatedBlogs,
-  blogsSearch
+  blogsSearch,
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -42,6 +42,6 @@ router.route("/blogs/photo/:slug").get(getPhoto);
 
 router.route("/blogs/relatedListBlogs").post(listRelatedBlogs);
 
-router.route("/blogs/search").get(blogsSearch);
+router.route("/blog/search").get(blogsSearch);
 
 module.exports = router;
