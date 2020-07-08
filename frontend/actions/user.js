@@ -11,6 +11,20 @@ const getPublicProfile = async (username) => {
   }
 };
 
+const getProfile = async (token) => {
+  try {
+    const res = await fetch(`${API}/user/profile`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return await res.json();
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const getPhoto = async (username, token) => {
   try {
     const res = await fetch(`${API}/user/profile/${username}`, {
@@ -25,16 +39,17 @@ const getPhoto = async (username, token) => {
   }
 };
 
-const updateUser = async (dataInput, token) => {
+const updateUser = async (userData, token) => {
   try {
     const updatedUser = await fetch(`${API}/user/update`, {
       method: "PUT",
       headers: {
+        // "Access-Control-Allow-Origin": "*",
         Authorization: `Bearer ${token}`,
-        Accept: "application/json",
-        "Content-Type": "application/json",
+        // Accept: "application/json",
+        // "Content-Type": "application/json",
       },
-      body: dataInput,
+      body: userData,
     });
     return await updatedUser.json();
   } catch (error) {
@@ -42,4 +57,4 @@ const updateUser = async (dataInput, token) => {
   }
 };
 
-export { getPublicProfile, getPhoto, updateUser };
+export { getPublicProfile, getPhoto, updateUser, getProfile };

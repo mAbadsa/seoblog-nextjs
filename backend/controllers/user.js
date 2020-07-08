@@ -8,6 +8,8 @@ const Blog = require("../models/Blog");
 
 const read = (req, res) => {
   req.profile.hashed_password = undefined;
+  console.log("req.profile");
+  console.log(req.profile);
   return res.status(200).json(req.profile);
 };
 
@@ -31,7 +33,7 @@ const publicProfile = async (req, res) => {
   }
 };
 
-const updateUser = () => {
+const updateUser = (req, res) => {
   let form = formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
@@ -42,6 +44,12 @@ const updateUser = () => {
     }
     let user = req.profile;
     user = _.extend(user, fields);
+
+    if (fields.password && fields.password.length < 6) {
+      return res.status(400).json({
+        error: "Password should be min 6 characters",
+      });
+    }
 
     if (files.photo) {
       if (files.photo.size >= 10000000) {

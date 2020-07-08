@@ -299,7 +299,7 @@ const CreateBlog = ({ router }) => {
       </div>
       <Snackbar
         open={open}
-        autoHideDuration={2000}
+        autoHideDuration={6000}
         onClose={handleClose}
         anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
       >
