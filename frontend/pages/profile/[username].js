@@ -62,14 +62,27 @@ const Profile = ({ user, blogs, query }) => {
             <div className="col-md-12">
               <div className="card">
                 <div className="card-body">
-                  <h5 className="card-title">{user.name}</h5>
-                  {/* <Link href={`${profileLink}/`}>
-                    <a href={`${user.profile}`}>View Profile</a>
-                  </Link> */}
-                  <a href={`${user.profile}`}>View Profile</a>
-                  <p className="card-text">
-                    Joined {moment(user.createdAt).fromNow()}
-                  </p>
+                  <div className="row">
+                    <div className="col-md-8">
+                      <h5 className="card-title">{user.name}</h5>
+                      <a href={`${user.profile}`}>View Profile</a>
+                      <p className="card-text text-muted bg-light p-2">{user.about}</p>
+                      <p className="card-text text-muted">
+                        Joined{" "}
+                        <span className="text-primary">
+                          {moment(user.createdAt).fromNow()}
+                        </span>
+                      </p>
+                    </div>
+                    <div className="col-md-4">
+                      <img
+                        src={`${API}/user/photo/${user.username}`}
+                        className="img img-fluid img-thumbnail mb-3"
+                        style={{ maxHeight: "auto", maxWidth: "100%" }}
+                        alt="Avatar"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -109,7 +122,6 @@ const Profile = ({ user, blogs, query }) => {
 Profile.getInitialProps = async ({ query }) => {
   try {
     const userProfileInfo = await getPublicProfile(query.username);
-    const res = await getPhoto(query.username);
     return {
       user: userProfileInfo.user,
       blogs: userProfileInfo.blogs,

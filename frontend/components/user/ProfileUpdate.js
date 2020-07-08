@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getCookie, isAuth } from "../../actions/auth";
 import { getProfile, updateUser } from "../../actions/user";
+import { API } from "../../config";
 import Router from "next/router";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
@@ -19,7 +20,7 @@ const ProfileUpdate = () => {
     loading: false,
     about: "",
     condition: "",
-    message: ""
+    message: "",
   });
 
   const token = getCookie("token");
@@ -36,7 +37,7 @@ const ProfileUpdate = () => {
     error,
     about,
     condition,
-    message
+    message,
   } = values;
 
   const getInitProfileData = async () => {
@@ -70,7 +71,6 @@ const ProfileUpdate = () => {
     setValues({ ...values, loading: true });
     try {
       const userDataUpdated = await updateUser(userData, token);
-
       setValues({
         ...values,
         success: true,
@@ -82,8 +82,9 @@ const ProfileUpdate = () => {
         password: "",
         sucess: true,
         condition: "success",
-        messgae: "Update successed",
+        message: "Update successed",
       });
+      console.log(userDataUpdated);
       setOpen(true);
     } catch (error) {
       console.log(error);
@@ -92,8 +93,9 @@ const ProfileUpdate = () => {
         success: false,
         error: true,
         condition: "error",
-        message: error,
+        message: userDataUpdated.error,
       });
+
       setOpen(true);
     }
   };
@@ -105,7 +107,7 @@ const ProfileUpdate = () => {
           <label className="btn btn-outline-primary btn-block">
             Profile Photo
             <input
-              onChange={handleChange("file")}
+              onChange={handleChange("photo")}
               type="file"
               accept="image/*"
               hidden
@@ -183,7 +185,12 @@ const ProfileUpdate = () => {
         <div className="row">
           <div className="col-md-4">
             <h5>User Avatar Image</h5>
-            <img src="" alt="Avatar" />
+            <img
+              src={`${API}/user/photo/${username}`}
+              className="img img-fluid img-thumbnail mb-3"
+              style={{ maxHeight: "auto", maxWidth: "100%" }}
+              alt="Avatar"
+            />
           </div>
           <div className="col-md-8">{profileUpdateForm()}</div>
         </div>

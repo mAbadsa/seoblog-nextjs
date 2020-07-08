@@ -12,10 +12,10 @@ const {
 
 router.route("/user/profile").get(requireSignin, authMiddleware, read);
 
-router.route("/user/:username").get(publicProfile);
+router.route("/user/p/:username").get(publicProfile);
 
 router.route("/user/update").put(requireSignin, authMiddleware, updateUser);
 
-router.route("/user/profile/:username").get(getPhoto);
+router.route("/user/photo/:username").get(getPhoto);
 
 module.exports = router;

@@ -4,7 +4,7 @@ import queryString from "query-string";
 
 const getPublicProfile = async (username) => {
   try {
-    const user = await fetch(`${API}/user/${username}`);
+    const user = await fetch(`${API}/user/p/${username}`);
     return await user.json();
   } catch (error) {
     console.log(error);
@@ -27,7 +27,7 @@ const getProfile = async (token) => {
 
 const getPhoto = async (username, token) => {
   try {
-    const res = await fetch(`${API}/user/profile/${username}`, {
+    const res = await fetch(`${API}/user/photo/${username}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`,
