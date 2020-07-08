@@ -50,17 +50,18 @@ const Card = ({ blog }) => {
       </header>
       <section className="">
         <p className="mark ml-1 py-2">
-          Written by: <span className="text-success">{blog.postedBy.name}</span>{" "}
+          Written by:{" "}
+          <span className="text-success">
+            <Link href={`/profile/${blog.postedBy.username}`}>
+              <a>{blog.postedBy.name}</a>
+            </Link>
+          </span>{" "}
           | Published {moment(blog.createdAt).fromNow()}
         </p>
       </section>
       <div className="row my-0 mx-0">
-        <div className="my-1 py-2">
-          {showCategories()}
-        </div>
-        <div className="my-1 ml-1 py-2">
-          {showTags()}
-        </div>
+        <div className="my-1 py-2">{showCategories()}</div>
+        <div className="my-1 ml-1 py-2">{showTags()}</div>
       </div>
       <div className="row">
         <div className="col-md-3">

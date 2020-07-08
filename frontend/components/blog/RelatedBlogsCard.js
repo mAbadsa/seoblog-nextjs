@@ -24,8 +24,12 @@ const RelatedBlogsCard = ({ blog }) => {
           <div className="blog-excerpt">{renderHtml(blog.excerpt)}</div>
           <p className="" style={{ fontSize: "12px" }}>
             Written by:{" "}
-            <span className="text-primary">{blog.postedBy.name}</span> |
-            Published{" "}
+            <span className="text-primary">
+              <Link href={`/profile/${blog.postedBy.username}`}>
+                <a>{blog.postedBy.name}</a>
+              </Link>
+            </span>{" "}
+            | Published{" "}
             <span className="text-primary">
               {moment(blog.createdAt).fromNow()}
             </span>

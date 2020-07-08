@@ -113,8 +113,12 @@ const singleBlog = ({ blog, query }) => {
                   <h1 className="display-2 py-3 bg-light">{blog.title}</h1>
                   <p className="lead py-1">
                     Written by:{" "}
-                    <span className="text-primary">{blog.postedBy.name}</span> |
-                    Published{" "}
+                    <span className="text-primary">
+                      <Link href={`/profile/${blog.postedBy.username}`}>
+                        <a>{blog.postedBy.name}</a>
+                      </Link>
+                    </span>{" "}
+                    | Published{" "}
                     <span className="text-primary">
                       {moment(blog.createdAt).fromNow()}
                       primary

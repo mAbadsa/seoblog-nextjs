@@ -12,11 +12,12 @@ const publicProfile = async (req, res) => {
   try {
     const user = await User.findOne({ username }).exec();
     user.photo = undefined;
+    user.hashed_password = undefined;
     const blogs = await Blog.find({ postedBy: user._id })
       .populate("postedBy", "_id username name email role photo")
       .populate("categories", "_id name slug")
       .populate("tags", "_id name slug")
-      .select("title _id");
+      .select("title _id createdAt updateAt");
     res.status(200).json({
       user,
       blogs,
