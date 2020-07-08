@@ -109,6 +109,7 @@ const Profile = ({ user, blogs, query }) => {
 Profile.getInitialProps = async ({ query }) => {
   try {
     const userProfileInfo = await getPublicProfile(query.username);
+    const res = await getPhoto(query.username);
     return {
       user: userProfileInfo.user,
       blogs: userProfileInfo.blogs,

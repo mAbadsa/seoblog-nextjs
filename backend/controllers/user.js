@@ -69,10 +69,8 @@ const getPhoto = async (req, res) => {
   const { username } = req.params;
   try {
     const user = await User.findOne({ username });
-    if (user.photo.data) {
-      res.set("Content-Type", user.photo.contentType);
-      res.send(user.photo.data);
-    }
+    res.set("Content-Type", user.photo.contentType);
+    res.send(user.photo.data);
   } catch (error) {
     if (!user) {
       res.status(404).json({ error: "user not found" });
