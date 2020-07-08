@@ -26,7 +26,10 @@ const Profile = ({ user, blogs, query }) => {
           content={`${DOMAIN_NAME}/profile/${query.username}`}
         />
         <meat property="og:site_name" content={`${APP_NAME}`} />
-        <meat property="og:image" content={`${DOMAIN_NAME}/static/images/seoblog.jpg`}/>
+        <meat
+          property="og:image"
+          content={`${DOMAIN_NAME}/static/images/seoblog.jpg`}
+        />
         <meat
           property="og:image:secure_url"
           content={`${DOMAIN_NAME}/static/images/seoblog.jpg`}
@@ -109,7 +112,7 @@ Profile.getInitialProps = async ({ query }) => {
     return {
       user: userProfileInfo.user,
       blogs: userProfileInfo.blogs,
-      query
+      query,
     };
   } catch (error) {
     return { error };
