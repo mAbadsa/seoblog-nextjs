@@ -19,10 +19,10 @@ const publicProfile = async (req, res) => {
     user.photo = undefined;
     user.hashed_password = undefined;
     const blogs = await Blog.find({ postedBy: user._id })
-      .populate("postedBy", "_id username name email role photo")
+      .populate("postedBy", "_id username name email role photo profile")
       .populate("categories", "_id name slug")
       .populate("tags", "_id name slug")
-      .select("title _id createdAt updateAt");
+      .select("title _id createdAt updateAt slug");
     res.status(200).json({
       user,
       blogs,

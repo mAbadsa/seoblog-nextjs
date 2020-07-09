@@ -1,7 +1,7 @@
 import Head from "next/head";
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { getPublicProfile } from "../../actions/user";
+import { isAuth } from "../../actions/auth";
 import Layout from "../../components/Layout";
 import { API, APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 import moment from "moment";
@@ -40,6 +40,16 @@ const Profile = ({ user, blogs, query }) => {
     );
   };
 
+  console.log(user);
+  console.log(blogs);
+
+  // let blogLink;
+  // if (isAuth() && isAuth().role === 1) {
+  //   blogLink = `/blogs`;
+  // } else if (isAuth() && isAuth().role === 0) {
+  //   blogLink = `/user/blogs`;
+  // }
+
   const showUserBlogs = () => {
     return blogs.map((b, i) => (
       <div className="" key={i}>
@@ -66,7 +76,9 @@ const Profile = ({ user, blogs, query }) => {
                     <div className="col-md-8">
                       <h5 className="card-title">{user.name}</h5>
                       <a href={`${user.profile}`}>View Profile</a>
-                      <p className="card-text text-muted bg-light p-2">{user.about}</p>
+                      <p className="card-text text-muted bg-light p-2">
+                        {user.about}
+                      </p>
                       <p className="card-text text-muted">
                         Joined{" "}
                         <span className="text-primary">

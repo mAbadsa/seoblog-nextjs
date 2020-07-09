@@ -130,4 +130,5 @@ module.exports = {
   requireSignin,
   authMiddleware,
   adminMiddleware,
+  canUpdateDeleteBlog,
 };

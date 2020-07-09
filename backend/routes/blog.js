@@ -21,6 +21,7 @@ const {
   requireSignin,
   authMiddleware,
   adminMiddleware,
+  canUpdateDeleteBlog,
 } = require("../controllers/auth");
 const { create } = require("lodash");
 
@@ -53,7 +54,7 @@ router.route("/:username/blogs").get(authUserListBlogs);
 
 router
   .route("/user/blogs/:slug")
-  .delete(requireSignin, authMiddleware, deleteBlog)
-  .put(requireSignin, authMiddleware, updateBlog);
+  .delete(requireSignin, authMiddleware, canUpdateDeleteBlog, deleteBlog)
+  .put(requireSignin, authMiddleware, canUpdateDeleteBlog, updateBlog);
 
 module.exports = router;

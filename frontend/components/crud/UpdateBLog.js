@@ -315,15 +315,6 @@ const UpdateBlog = ({ router }) => {
             {showTags()}
           </ul>
         </div>
-        <pre style={{ backgroundColor: "#852532" }}>
-          {JSON.stringify(categories, null, 2)}
-        </pre>
-        <pre style={{ backgroundColor: "#159592" }}>
-          {JSON.stringify(tags, null, 2)}
-        </pre>
-        <pre style={{ backgroundColor: "#ff2532" }}>
-          {JSON.stringify(tags, null, 2)}
-        </pre>
       </div>
       <Snackbar
         open={open}

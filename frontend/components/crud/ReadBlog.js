@@ -10,7 +10,7 @@ import Divider from "@material-ui/core/Divider";
 
 import moment from "moment";
 
-const ReadBlog = () => {
+const ReadBlog = ({ username }) => {
   const [blogs, setBlogs] = useState([]);
   const [message, setMessage] = useState("");
   const [open, setOpen] = useState(false);
@@ -19,12 +19,12 @@ const ReadBlog = () => {
 
   useEffect(() => {
     loadBlogs();
-  }, [blogs]);
+  }, []);
 
   const loadBlogs = async () => {
     try {
-      const blogsList = await getBlogs();
-      setBlogs(blogsList.data);
+      const blogsList = await getBlogs(username);
+      setBlogs(blogsList.blogs);
     } catch (err) {
       console.log(err);
     }
@@ -118,10 +118,7 @@ const ReadBlog = () => {
     <React.Fragment>
       <div className="row py-5 bg-light">
         <div className="col-md-12">
-          <ul className="list-group">
-            {showBlogs()}
-            <pre>{JSON.stringify(blogs, null, 4)}</pre>
-          </ul>
+          <ul className="list-group">{showBlogs()}</ul>
         </div>
       </div>
       <Snackbar
