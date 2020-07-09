@@ -11,6 +11,7 @@ const {
   getPhoto,
   listRelatedBlogs,
   blogsSearch,
+  authUserListBlogs,
 } = require("../controllers/blog");
 
 const { runValidation } = require("../validators/index");
@@ -47,6 +48,8 @@ router.route("/blog/search").get(blogsSearch);
 
 // Auth User CRUD Blog Route
 router.route("/user/blogs").post(requireSignin, authMiddleware, createBlog);
+
+router.route("/:username/blogs").get(authUserListBlogs);
 
 router
   .route("/user/blogs/:slug")

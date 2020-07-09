@@ -339,6 +339,29 @@ const blogsSearch = async (req, res) => {
   }
 };
 
+// Auth User CRUD Blogs
+const authUserListBlogs = (req, res) => {
+  const { username } = req.params;
+  User.findOne({ username }).exec((err, user) => {
+    if (err) {
+      return res.status(400).json({ error: errorHandler(err) });
+    }
+    Blog.find({ postedBy: user._id })
+      .populate("categories", "_id name slug")
+      .populate("tags", "_id name slug")
+      .populate("postedBy", "_id name username email")
+      .select("_id title slug createdAt updatedAt postedBy")
+      .exec((err, blogs) => {
+        if (err) {
+          return res.status(400).json({ error: errorHandler(err) });
+        }
+        res.status(200).json({
+          blogs,
+        });
+      });
+  });
+};
+
 module.exports = {
   getBlogs,
   createBlog,
@@ -349,4 +372,5 @@ module.exports = {
   getPhoto,
   listRelatedBlogs,
   blogsSearch,
+  authUserListBlogs,
 };
