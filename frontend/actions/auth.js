@@ -93,3 +93,14 @@ export const signout = (next) => {
     .then((res) => console.log(res))
     .catch((err) => console.log(err));
 };
+
+export const updateUserInLocalStorage = (user, next) => {
+  if(window !== 'undefined') {
+    if(localStorage.getItem('user')){
+      let auth = JSON.parse(localStorage.getItem('user'));
+      auth = user;
+      localStorage.setItem('user', JSON.stringify(auth));
+    }
+  }
+  next();
+}

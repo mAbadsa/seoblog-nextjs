@@ -5,6 +5,7 @@ const errHandler = require("../helpers/dbHandleError");
 
 const User = require("../models/User");
 const Blog = require("../models/Blog");
+const { nextTick } = require("process");
 
 const read = (req, res) => {
   req.profile.hashed_password = undefined;
@@ -31,7 +32,7 @@ const publicProfile = async (req, res) => {
   }
 };
 
-const updateUser = (req, res) => {
+const updateUser = (req, res, next) => {
   let form = formidable.IncomingForm();
   form.keepExtensions = true;
   form.parse(req, (err, fields, files) => {
@@ -69,6 +70,8 @@ const updateUser = (req, res) => {
         });
       }
       user.hashed_password = undefined;
+      user.salt = undefined;
+      user.photo = undefined;
       console.log(user);
       res.status(200).json(user);
     });

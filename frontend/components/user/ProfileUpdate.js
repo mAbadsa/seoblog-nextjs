@@ -1,5 +1,9 @@
 import { useState, useEffect } from "react";
-import { getCookie, isAuth } from "../../actions/auth";
+import {
+  getCookie,
+  isAuth,
+  updateUserInLocalStorage,
+} from "../../actions/auth";
 import { getProfile, updateUser } from "../../actions/user";
 import { API } from "../../config";
 import Router from "next/router";
@@ -66,38 +70,38 @@ const ProfileUpdate = () => {
     setValues({ ...values, [name]: value, userData: userDataForm });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     setValues({ ...values, loading: true });
-    try {
-      const userDataUpdated = await updateUser(userData, token);
-      setValues({
-        ...values,
-        success: true,
-        error: false,
-        username: userDataUpdated.username,
-        email: userDataUpdated.email,
-        name: userDataUpdated.name,
-        about: userDataUpdated.about,
-        password: "",
-        sucess: true,
-        condition: "success",
-        message: "Update successed",
-      });
-      console.log(userDataUpdated);
-      setOpen(true);
-    } catch (error) {
-      console.log(error);
-      setValues({
-        ...values,
-        success: false,
-        error: true,
-        condition: "error",
-        message: userDataUpdated.error,
-      });
-
-      setOpen(true);
-    }
+    updateUser(userData, token).then((data) => {
+      if (data.error) {
+        setValues({
+          ...values,
+          success: false,
+          error: true,
+          condition: "error",
+          message: data.error,
+        });
+        setOpen(true);
+      } else {
+        updateUserInLocalStorage(data, () => {
+          setValues({
+            ...values,
+            success: true,
+            error: false,
+            username: data.username,
+            email: data.email,
+            name: data.name,
+            about: data.about,
+            password: "",
+            sucess: true,
+            condition: "success",
+            message: "Update successed",
+          });
+          setOpen(true);
+        });
+      }
+    });
   };
 
   const profileUpdateForm = () => {
@@ -175,7 +179,6 @@ const ProfileUpdate = () => {
     if (reason === "clickaway") {
       return;
     }
-
     setOpen(false);
   };
 
