@@ -21,6 +21,7 @@ const {
   authMiddleware,
   adminMiddleware,
 } = require("../controllers/auth");
+const { create } = require("lodash");
 
 router.route("/blogs").get(getBlogs).post(
   // blogCreateValidator,
@@ -43,5 +44,13 @@ router.route("/blogs/photo/:slug").get(getPhoto);
 router.route("/blogs/relatedListBlogs").post(listRelatedBlogs);
 
 router.route("/blog/search").get(blogsSearch);
+
+// Auth User CRUD Blog Route
+router.route("/user/blogs").post(requireSignin, authMiddleware, createBlog);
+
+router
+  .route("/user/blogs/:slug")
+  .delete(requireSignin, authMiddleware, deleteBlog)
+  .put(requireSignin, authMiddleware, updateBlog);
 
 module.exports = router;
