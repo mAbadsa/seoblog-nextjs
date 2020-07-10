@@ -1,6 +1,22 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
 import cookie from "js-cookie";
+import Router from "next/router";
+
+export const handleResponse = (response) => {
+  if (response.status === 401) {
+    signout(() => {
+      Router.push({
+        pathname: "/signin",
+        query: {
+          message: "Your session is expired, Please signin"
+        },
+      });
+    });
+  } else {
+    return;
+  }
+};
 
 export const signup = (user) => {
   return fetch(`${API}/signup`, {
@@ -90,17 +106,17 @@ export const signout = (next) => {
   return fetch(`${API}/signout`, {
     method: "GET",
   })
-    .then((res) => console.log(res))
+    .then((res) => res)
     .catch((err) => console.log(err));
 };
 
 export const updateUserInLocalStorage = (user, next) => {
-  if(window !== 'undefined') {
-    if(localStorage.getItem('user')){
-      let auth = JSON.parse(localStorage.getItem('user'));
+  if (window !== "undefined") {
+    if (localStorage.getItem("user")) {
+      let auth = JSON.parse(localStorage.getItem("user"));
       auth = user;
-      localStorage.setItem('user', JSON.stringify(auth));
+      localStorage.setItem("user", JSON.stringify(auth));
     }
   }
   next();
-}
+};

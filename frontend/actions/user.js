@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
 import queryString from "query-string";
+import { handleResponse } from "./auth";
 
 const getPublicProfile = async (username) => {
   try {
@@ -19,6 +20,7 @@ const getProfile = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    handleResponse(res);
     return await res.json();
   } catch (error) {
     console.log(error);
@@ -33,6 +35,7 @@ const getPhoto = async (username, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
+    handleResponse(res);
     return await res.json();
   } catch (error) {
     console.log(error);
@@ -51,6 +54,7 @@ const updateUser = async (userData, token) => {
       },
       body: userData,
     });
+    handleResponse(res);
     return await updatedUser.json();
   } catch (error) {
     console.log(error);

@@ -134,6 +134,7 @@ const Category = () => {
     );
     if (answer) {
       deleteCategory(slug, getCookie("token")).then((data) => {
+        console.log(data);
         if (data.error) {
           handleClick();
           setValues({

@@ -71,13 +71,12 @@ const delCategory = (req, res) => {
   const slug = req.params.slug.toLowerCase();
   Category.findOneAndDelete({ slug }).exec((err, category) => {
     if (err) {
-      return res.status(200).json({
+      return res.status(400).json({
         error: errorHandler(err),
       });
     }
     res.status(200).json({
       message: "Delete category successed",
-      data: [],
     });
   });
 };

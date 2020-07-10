@@ -277,16 +277,17 @@ const updateBlog = (req, res) => {
   });
 };
 
-const getPhoto = async (req, res) => {
+const getPhoto = (req, res) => {
   const slug = req.params.slug.toLowerCase();
-  try {
-    const blog = await Blog.findOne({ slug }).select("photo");
-    if (!blog) res.status(404).json({ error: "Blog not found!" });
-    res.set("Content-Type", blog.photo.contentType);
-    return await res.send(blog.photo.data);
-  } catch (err) {
-    res.status(404).json({ error: errorHandler(err) });
-  }
+  Blog.findOne({ slug })
+    .select("photo")
+    .exec((err, blog) => {
+      if (err || !blog) {
+        return res.status(404).json({ error: "Blog not found!" });
+      }
+      res.set("Content-Type", blog.photo.contentType);
+      res.send(blog.photo.data);
+    });
 };
 
 const listRelatedBlogs = async (req, res) => {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { signin, authenticate, isAuth } from "../../actions/auth";
 import Router from "next/router";
 
-const SigninComponent = () => {
+const SigninComponent = ({ redirectMessage }) => {
   const [values, setValues] = useState({
     email: "",
     password: "",
@@ -50,6 +50,14 @@ const SigninComponent = () => {
     });
   };
 
+  const showRedirctMessage = () => {
+    if (redirectMessage) {
+      return <div className="alert alert-danger">{redirectMessage}</div>;
+    } else {
+      return;
+    }
+  };
+
   const showLoading = () =>
     loading ? <div className="alert alert-info">Loading...</div> : "";
 
@@ -63,6 +71,9 @@ const SigninComponent = () => {
     return (
       <div className="container">
         <h1 className="my-3 pb-3 text-center text-primary">Signin</h1>
+        <div className="row">
+          <div className="col-md-6 offset-3">{showRedirctMessage()}</div>
+        </div>
         <div className="row">
           <div className="col-md-6 offset-3">
             <form onSubmit={handleSubmit}>

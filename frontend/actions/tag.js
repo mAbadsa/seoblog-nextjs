@@ -1,6 +1,7 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
 import cookie from "js-cookie";
+import { handleResponse } from "./auth";
 
 const createTag = (tagName, token) => {
   return fetch(`${API}/tag`, {
@@ -12,7 +13,10 @@ const createTag = (tagName, token) => {
     },
     body: JSON.stringify(tagName),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      handleResponse(res);
+      return res.json();
+    })
     .catch((err) => console.log(err));
 };
 
@@ -39,7 +43,10 @@ const deleteTag = (slug, token) => {
       Authorization: `Bearer ${token}`,
     },
   })
-    .then((res) => res.json())
+    .then((res) => {
+      handleResponse(res);
+      return res.json();
+    })
     .catch((err) => console.log(err));
 };
 

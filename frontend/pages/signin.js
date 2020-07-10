@@ -1,12 +1,13 @@
 import Layout from "../components/Layout";
 import SigninComponent from "../components/auth/SigninComponent";
+import { withRouter } from "next/router";
 
-const Signin = () => {
+const Signin = ({ router }) => {
   return (
     <Layout>
-      <SigninComponent />
+      <SigninComponent redirectMessage={router.query.message} />
     </Layout>
   );
 };
 
-export default Signin;
+export default withRouter(Signin);

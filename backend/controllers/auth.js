@@ -48,10 +48,10 @@ const signin = (req, res) => {
     }
 
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+      expiresIn: "1m",
     });
 
-    res.cookie("token", token, { expiresIn: "id" });
+    res.cookie("token", token, { expiresIn: "1m" });
 
     const { _id, email, name, role, username } = user;
 
