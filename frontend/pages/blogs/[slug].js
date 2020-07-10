@@ -9,6 +9,7 @@ import { API, APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 import Chip from "@material-ui/core/Chip";
 import moment from "moment";
 import RelatedBlogsCard from "../../components/blog/RelatedBlogsCard";
+import DisqusThread from "../../components/DisqusThread";
 
 const singleBlog = ({ blog, query }) => {
   const head = () => {
@@ -142,7 +143,14 @@ const singleBlog = ({ blog, query }) => {
                 <div className="row">{showRealtedBlogs()}</div>
               </div>
               <div className="container">
-                <h4 className="text-center py-5">Show Comments</h4>
+                <hr/>
+                <div>
+                  <DisqusThread
+                    id={blog._id}
+                    title={blog.title}
+                    path={`/blogs/${blog.slug}`}
+                  />
+                </div>
               </div>
             </div>
           </article>
