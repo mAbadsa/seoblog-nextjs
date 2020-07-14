@@ -9,6 +9,6 @@ const { contactFormValidation } = require("../validators/form");
 
 router
   .route("/contact")
-  .get(contactFormValidation, runValidation, formContact);
+  .post(contactFormValidation, runValidation, formContact);
 
 module.exports = router;

@@ -75,6 +75,7 @@ const signout = (req, res) => {
 
 const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
+  algorithms: ['RS256']
 });
 
 const authMiddleware = (req, res, next) => {

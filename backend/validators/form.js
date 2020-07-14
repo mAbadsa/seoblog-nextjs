@@ -6,7 +6,6 @@ exports.contactFormValidation = [
   check("message")
     .not()
     .isEmpty()
-    .isLength()
-    .isEmail({ min: 20 })
+    .isLength({ min: 20 })
     .withMessage("Message must be at least 20 characters long!"),
 ];
