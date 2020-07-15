@@ -120,7 +120,9 @@ const Profile = ({ user, blogs, query }) => {
                     Message {user.name}
                   </h5>
                   <a href={`${user.profile}`}>View Profile</a>
-                  <p className="card-text">contact form</p>
+                  <Link href={`/contact`}>
+                    <a className="card-link">Contact me</a>
+                  </Link>
                 </div>
               </div>
             </div>

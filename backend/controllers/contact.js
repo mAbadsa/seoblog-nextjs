@@ -2,7 +2,7 @@ const sendGridMail = require("@sendgrid/mail");
 
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-exports.formContact = (req, res) => {
+exports.contact = (req, res) => {
   const { email, name, message } = req.body;
   const emailContent = {
     to: process.env.EMAIL_TO,
@@ -20,8 +20,9 @@ exports.formContact = (req, res) => {
         <p>https://www.seoblog.com</p>
     `,
   };
+};
 
-exports.formAuthorContact = (req, res) => {
+exports.authorContact = (req, res) => {
   const { authorEmail, email, name, message } = req.body;
   const emailContent = {
     to: [authorEmail, process.env.EMAIL_TO],

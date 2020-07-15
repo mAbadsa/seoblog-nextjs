@@ -1,18 +1,16 @@
 const express = require("express");
 const router = express.Router();
 
-const { formContact, formAuthorContact } = require("../controllers/formContact");
+const { contact, authorContact } = require("../controllers/contact");
 
 // Validators
 const { runValidation } = require("../validators/index");
 const { contactFormValidation } = require("../validators/form");
 
-router
-  .route("/contact")
-  .post(contactFormValidation, runValidation, formContact);
+router.route("/contact").post(contactFormValidation, runValidation, contact);
 
 router
-  .route("/contact-author-form")
-  .post(contactFormValidation, runValidation, formAuthorContact);
+  .route("/contact-blog-author")
+  .post(contactFormValidation, runValidation, authorContact);
 
 module.exports = router;
