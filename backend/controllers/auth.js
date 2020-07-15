@@ -207,7 +207,7 @@ const resetPassword = (req, res) => {
 
         res.status(201).json({
           success: true,
-          messgae: "Password is changed. You can login by new password.",
+          message: "Password is changed. You can login by new password.",
         });
       });
     });

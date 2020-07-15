@@ -134,14 +134,14 @@ export const forgetPassword = (email) => {
     .catch((err) => console.log(err));
 };
 
-export const resetPassword = (token, newPassword) => {
+export const resetPassword = (resetPasswordToken, newPassword) => {
   return fetch(`${API}/reset-password`, {
     method: "PUT",
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
     },
-    body: JSON.stringify({token, newPassword}),
+    body: JSON.stringify({resetPasswordToken, newPassword}),
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));
