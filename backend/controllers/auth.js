@@ -163,7 +163,7 @@ const forgetPassword = (req, res) => {
 
     user.updateOne({ resetPasswordToken: token }, (err, success) => {
       if (err) {
-        return res.status(400).json({ err: errorHandler(err) });
+        return res.status(400).json({ error: errorHandler(err) });
       } else {
         sendGridMail.send(emailContent).then((sent) => {
           res.status(200).json({

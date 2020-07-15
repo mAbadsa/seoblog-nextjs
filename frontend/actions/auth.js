@@ -120,3 +120,29 @@ export const updateUserInLocalStorage = (user, next) => {
   }
   next();
 };
+
+export const forgetPassword = (email) => {
+  return fetch(`${API}/forget-password`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({email}),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
+export const resetPassword = (token, newPassword) => {
+  return fetch(`${API}/reset-password`, {
+    method: "PUT",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({token, newPassword}),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { signin, authenticate, isAuth } from "../../actions/auth";
 import Router from "next/router";
+import Link from "next/link";
 
 const SigninComponent = ({ redirectMessage }) => {
   const [values, setValues] = useState({
@@ -116,6 +117,11 @@ const SigninComponent = ({ redirectMessage }) => {
                 </button>
               </div>
             </form>
+            <div>
+              <Link className="text-primary" href="auth/password/forget">
+                <a>Forget password</a>
+              </Link>
+            </div>
           </div>
         </div>
       </div>
