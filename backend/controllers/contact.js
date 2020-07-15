@@ -20,6 +20,17 @@ exports.contact = (req, res) => {
         <p>https://www.seoblog.com</p>
     `,
   };
+  sendGridMail
+    .send(emailContent)
+    .then((send) => {
+      return res.status(200).json({
+        success: true,
+        emailContent,
+      });
+    })
+    .catch((error) => {
+      return res.status(400).json({ error });
+    });
 };
 
 exports.authorContact = (req, res) => {
@@ -41,15 +52,15 @@ exports.authorContact = (req, res) => {
     `,
   };
 
-  sendGridMail.send(emailContent).then((send) => {
-    return res
-      .status(200)
-      .json({
+  sendGridMail
+    .send(emailContent)
+    .then((send) => {
+      return res.status(200).json({
         success: true,
         emailContent,
-      })
-      .catch((err) => {
-        return res.status(400).json(err);
       });
-  });
+    })
+    .catch((err) => {
+      return res.status(400).json(err);
+    });
 };

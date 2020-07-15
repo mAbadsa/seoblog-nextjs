@@ -3,16 +3,16 @@ import { API } from "../config";
 import queryString from "query-string";
 import { isAuth, handleResponse } from "./auth";
 
-const contact = (contactData) => {
-  let conatctEndPoint;
+const sendContactEmail = (contactData) => {
+  let contactEndPoint;
 
   if (contactData.authorEmail) {
-    conatctEndPoint = `${API}/contact-blog-author`;
+    contactEndPoint = `${API}/contact-blog-author`;
   } else {
-    conatctEndPoint = `${API}/conatct`;
+    contactEndPoint = `${API}/contact`;
   }
 
-  return fetch(conatctEndPoint, {
+  return fetch(contactEndPoint, {
     method: "POST",
     headers: {
       Accept: "application/json",
@@ -23,7 +23,6 @@ const contact = (contactData) => {
     .then((res) => {
       return res.json();
     })
-    .catch((err) => console.log(err));
 };
 
-export { contact };
+export { sendContactEmail };
