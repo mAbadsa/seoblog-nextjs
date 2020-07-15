@@ -21,6 +21,25 @@ exports.formContact = (req, res) => {
     `,
   };
 
+exports.formAuthorContact = (req, res) => {
+  const { authorEmail, email, name, message } = req.body;
+  const emailContent = {
+    to: [authorEmail, process.env.EMAIL_TO],
+    from: email,
+    subject: `Someone messaged you form - ${process.env.APP_NAME}`,
+    text: `Email received from contact form \n sender name ${name} \n sender email: ${email} sender message ${message}`,
+    html: `
+        <hr/>
+        <h4>Message received from:</h4>
+        <p>Name: ${name}</p>
+        <p>Email: ${email}</p>
+        <p>Messgae: ${message}</p>
+        <hr/>
+        <p>This email may contain sensetive information</p>
+        <p>https://www.seoblog.com</p>
+    `,
+  };
+
   sendGridMail.send(emailContent).then((send) => {
     return res
       .status(200)
