@@ -4,6 +4,10 @@ const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 const errorHandler = require("../helpers/dbHandleError");
 const Blog = require("../models/Blog");
+const sendGridMail = require("@sendgrid/mail");
+const _ = require("lodash");
+
+sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 const signup = (req, res) => {
   User.findOne({ email: req.body.email }).exec((err, user) => {
@@ -75,7 +79,7 @@ const signout = (req, res) => {
 
 const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
-  algorithms: ['RS256']
+  algorithms: ["RS256"],
 });
 
 const authMiddleware = (req, res, next) => {
@@ -124,6 +128,92 @@ const canUpdateDeleteBlog = (req, res, next) => {
   });
 };
 
+const forgetPassword = (req, res) => {
+  const { email } = req.body;
+  User.findOne({ email }, (err, user) => {
+    if (err || !user) {
+      return res
+        .status(400)
+        .json({ error: "User with that email does not exist!" });
+    }
+
+    const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, {
+      expiresIn: "10m",
+    });
+
+    console.log(token);
+
+    // reset url
+    const resetUrl = `${process.env.CLIENT_URL}/auth/password/reset/${token}`;
+
+    const emailContent = {
+      to: email,
+      from: process.env.EMAIL_FROM,
+      subject: `Reset Password Link Generatored`,
+      html: `
+          <hr/>
+          <h4>Reset Password Link.</h4>
+          <p>Click this link to reset password:</p>
+          <p> ${resetUrl} </p>
+          <hr/>
+          <p>This email may contain sensetive information</p>
+          <p>https://www.seoblog.com</p>
+      `,
+    };
+
+    user.updateOne({ resetPasswordToken: token }, (err, success) => {
+      if (err) {
+        return res.status(400).json({ err: errorHandler(err) });
+      } else {
+        sendGridMail.send(emailContent).then((sent) => {
+          res.status(200).json({
+            message: `Email has been sent to ${email}. Follow the instructions to reset your password. Link expires in 10min.`,
+          });
+        });
+      }
+    });
+  });
+};
+
+const resetPassword = (req, res) => {
+  const { resetPasswordToken, newPassword } = req.body;
+
+  jwt.verify(resetPasswordToken, process.env.JWT_RESET_PASSWORD, function (
+    err,
+    decoded
+  ) {
+    if (err) {
+      return res.status(401).json({ error: "Expired link. Try again" });
+    }
+
+    User.findOne({ resetPasswordToken }, (err, user) => {
+      if (err || !user) {
+        return res
+          .status(400)
+          .json({ error: "Something went Error, Try later." });
+      }
+
+      const updateFields = {
+        password: newPassword,
+        resetPasswordToken: "",
+      };
+
+      user = _.extend(user, updateFields);
+
+      user.save((err, result) => {
+        if (err) {
+          return res.status(400).json({ error: errorHandler(err) });
+        }
+
+        res.status(201).json({
+          success: true,
+          messgae: "Password is changed. You can login by new password.",
+        });
+      });
+    });
+  });
+};
+
 module.exports = {
   signup,
   signin,
@@ -132,4 +222,6 @@ module.exports = {
   authMiddleware,
   adminMiddleware,
   canUpdateDeleteBlog,
+  forgetPassword,
+  resetPassword,
 };
