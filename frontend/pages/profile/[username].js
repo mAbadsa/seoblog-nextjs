@@ -5,6 +5,7 @@ import { isAuth } from "../../actions/auth";
 import Layout from "../../components/Layout";
 import { API, APP_NAME, DOMAIN_NAME, FB_APP_ID } from "../../config";
 import moment from "moment";
+import ContactForm from "../../components/contact/ContactForm";
 
 const Profile = ({ user, blogs, query }) => {
   const head = () => {
@@ -119,10 +120,7 @@ const Profile = ({ user, blogs, query }) => {
                   <h5 className="card-title bg-primary py-4 px-4 text-white">
                     Message {user.name}
                   </h5>
-                  <a href={`${user.profile}`}>View Profile</a>
-                  <Link href={`/contact`}>
-                    <a className="card-link">Contact me</a>
-                  </Link>
+                  <ContactForm authorEmail={user.email}/>
                 </div>
               </div>
             </div>
