@@ -1,7 +1,5 @@
 import fetch from "isomorphic-fetch";
 import { API } from "../config";
-import queryString from "query-string";
-import { isAuth, handleResponse } from "./auth";
 
 const sendContactEmail = (contactData) => {
   let contactEndPoint;

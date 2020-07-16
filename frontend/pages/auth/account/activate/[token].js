@@ -34,13 +34,13 @@ const ActivationAccount = ({ router }) => {
       const { name } = jwt.decode(token);
       setValues({ ...values, name, token });
     }
-  }, []);
+  }, [router]);
 
   const handleSignup = (e) => {
     e.preventDefault();
     setValues({ ...values, name: "", email: "", password: "" });
     signup({ token }).then((data) => {
-      if (data.erorr) {
+      if (data.error) {
         setValues({
           ...values,
           error: data.error,
@@ -67,19 +67,20 @@ const ActivationAccount = ({ router }) => {
     error ? <div className="alert alert-danger">{error}</div> : "";
 
   const showSuccess = () =>
-    success ? <div className="alert alert-success">{message}</div> : "";
+    message ? <div className="alert alert-success">{message}</div> : "";
 
   return (
     <Layout>
       <div className="conatiner-fluid">
         <div className="row">
           <div className="col-md-8 offset-2 pt-3 mt-3">
+              <h5 className="lead mb-3">Click on button to activate your account</h5>
             {showLoading()}
             {showError()}
             {showSuccess()}
             <button
               className="btn btn-outline-primary mt-3"
-              type="submit"
+            //   type="submit"
               onClick={handleSignup}
             >
               Activation account

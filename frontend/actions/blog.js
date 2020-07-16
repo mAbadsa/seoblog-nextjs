@@ -20,7 +20,7 @@ const createBlog = (blog, token) => {
     body: blog,
   })
     .then((res) => {
-      handleResponse(res);
+      // handleResponse(res);
       return res.json();
     })
     .catch((err) => console.log(err));
@@ -105,7 +105,7 @@ const updateBlog = async (slug, blog, token) => {
       body: blog,
     });
 
-    handleResponse(res);
+    // handleResponse(res);
     return await res.json();
   } catch (err) {
     return console.log(err);
@@ -128,7 +128,7 @@ const deleteBlog = async (slug, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    handleResponse(res);
+    // handleResponse(res);
     return await res.json();
   } catch (err) {
     return console.log(err);

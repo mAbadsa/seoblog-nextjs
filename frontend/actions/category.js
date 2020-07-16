@@ -13,7 +13,7 @@ const createCategory = (categoryName, token) => {
     body: JSON.stringify(categoryName),
   })
     .then((res) => {
-      handleResponse(res);
+      // handleResponse(res);
       return res.json();
     })
     .catch((err) => {
@@ -45,7 +45,7 @@ const deleteCategory = (slug, token) => {
     },
   })
     .then((res) => {
-      handleResponse(res);
+      // handleResponse(res);
       return res.json();
     })
     .catch((err) => console.log(err));

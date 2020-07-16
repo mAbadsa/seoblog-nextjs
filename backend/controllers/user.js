@@ -5,7 +5,6 @@ const errHandler = require("../helpers/dbHandleError");
 
 const User = require("../models/User");
 const Blog = require("../models/Blog");
-const { nextTick } = require("process");
 
 const read = (req, res) => {
   req.profile.hashed_password = undefined;

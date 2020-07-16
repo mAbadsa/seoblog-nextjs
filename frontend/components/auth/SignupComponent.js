@@ -62,61 +62,72 @@ const SignupComponent = () => {
 
   const signupForm = () => {
     return (
-      <div className="container">
-        <h1 className="my-3 pb-3 text-center text-primar">Signup</h1>
-        <div className="row">
-          <div className="col-md-6 offset-3">
-            <form onSubmit={handleSubmit}>
-              <div className="form-group">
-                <label className="text-muted">Name: </label>
-                <input
-                  value={name}
-                  onChange={handleChange}
-                  className="form-control"
-                  type="text"
-                  placeholder="Type your name"
-                  name="name"
-                />
-              </div>
-              <div className="form-group">
-                <label className="text-muted">Email: </label>
-                <input
-                  value={email}
-                  onChange={handleChange}
-                  className="form-control"
-                  type="email"
-                  placeholder="Enter your email"
-                  name="email"
-                />
-              </div>
-              <div className="form-group">
-                <label className="text-muted">Password: </label>
-                <input
-                  value={password}
-                  onChange={handleChange}
-                  className="form-control"
-                  type="password"
-                  placeholder="Type your password"
-                  name="password"
-                />
-              </div>
-              <div>
-                <button className="btn btn-outline-primary btn-block">
-                  Signup
-                </button>
-              </div>
-            </form>
-          </div>
+      // <div className="container">
+      //   <h1 className="my-3 pb-3 text-center text-primar">Signup</h1>
+      //   <div className="row">
+      //     <div className="col-md-6 offset-3">
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label className="text-muted">Name: </label>
+          <input
+            value={name}
+            onChange={handleChange}
+            className="form-control"
+            type="text"
+            placeholder="Type your name"
+            name="name"
+          />
         </div>
-      </div>
+        <div className="form-group">
+          <label className="text-muted">Email: </label>
+          <input
+            value={email}
+            onChange={handleChange}
+            className="form-control"
+            type="email"
+            placeholder="Enter your email"
+            name="email"
+          />
+        </div>
+        <div className="form-group">
+          <label className="text-muted">Password: </label>
+          <input
+            value={password}
+            onChange={handleChange}
+            className="form-control"
+            type="password"
+            placeholder="Type your password"
+            name="password"
+          />
+        </div>
+        <div>
+          <button className="btn btn-outline-primary btn-block">Signup</button>
+        </div>
+      </form>
+      //     </div>
+      //   </div>
+      // </div>
     );
   };
   return (
     <React.Fragment>
-      {showLoading()}
-      {showError()}
-      {showMessage()}
-      {showForm && signupForm()}
+      <div className="container">
+        <h1 className="my-3 pb-3 text-center text-primar">Signup</h1>
+        <div className="row">
+          <div className="col-md-6 offset-3">
+            {showLoading()}
+            {showError()}
+            {showMessage()}
+            {showForm ? (
+              signupForm()
+            ) : (
+              <div className="alert alert-info">
+                We send activation link to your email
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
     </React.Fragment>
   );
 };

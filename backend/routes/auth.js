@@ -22,7 +22,7 @@ const {
 
 router.route("/pre-signup").post(userSignupValidator, runValidation, preSignup);
 
-router.route("/signup").post(userSignupValidator, runValidation, signup);
+router.route("/signup").post(signup);
 
 router.route("/signin").post(userSigninValidator, runValidation, signin);
 

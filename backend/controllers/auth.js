@@ -52,31 +52,69 @@ const preSignup = (req, res) => {
   });
 };
 
+// const signup = (req, res) => {
+//   User.findOne({ email: req.body.email }).exec((err, user) => {
+//     if (user) {
+//       return res.status(400).json({ error: "Email is taken" });
+//     }
+
+//     const { name, email, password } = req.body;
+//     let username = shortId();
+//     let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+//     const newUser = new User({ email, name, password, username, profile });
+//     newUser.save((err, user) => {
+//       if (err) {
+//         return res.status(400).json({
+//           error: err,
+//         });
+//       }
+
+//       res.status(201).json({
+//         user,
+//         message: "Signup success.",
+//         error: err,
+//       });
+//     });
+//   });
+// };
+
 const signup = (req, res) => {
-  User.findOne({ email: req.body.email }).exec((err, user) => {
-    if (user) {
-      return res.status(400).json({ error: "Email is taken" });
-    }
+  const token = req.body.token;
 
-    const { name, email, password } = req.body;
-    let username = shortId();
-    let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+  if (token) {
+    jwt.verify(
+      token,
+      process.env.JWT_ACCOUNT_ACTIVATION_SECRET,
+      function (err, decoded) {
+        if (err) {
+          return res.status(401).json({
+            error: "Expired link, signup again.",
+          });
+        }
 
-    const newUser = new User({ email, name, password, username, profile });
-    newUser.save((err, user) => {
-      if (err) {
-        return res.status(400).json({
-          error: err,
+        const { name, email, password } = jwt.decode(token);
+
+        let username = shortId();
+        let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+        const user = new User({ name, email, password, username, profile });
+
+        user.save((err, resulr) => {
+          if (err) {
+            return res.status(400).json({ error: errorHandler(err) });
+          }
+          res.status(201).json({
+            message: "Signup success.",
+          });
         });
       }
-
-      res.status(201).json({
-        user,
-        message: "Signup success.",
-        error: err,
-      });
+    );
+  } else {
+    return res.status(300).json({
+      error: "Something went wrong, try again.",
     });
-  });
+  }
 };
 
 const signin = (req, res) => {

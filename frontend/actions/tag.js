@@ -14,7 +14,7 @@ const createTag = (tagName, token) => {
     body: JSON.stringify(tagName),
   })
     .then((res) => {
-      handleResponse(res);
+      // handleResponse(res);
       return res.json();
     })
     .catch((err) => console.log(err));
@@ -44,7 +44,7 @@ const deleteTag = (slug, token) => {
     },
   })
     .then((res) => {
-      handleResponse(res);
+      // handleResponse(res);
       return res.json();
     })
     .catch((err) => console.log(err));

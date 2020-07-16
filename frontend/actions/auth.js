@@ -31,14 +31,14 @@ export const preSignup = (user) => {
     .catch((err) => console.log(err));
 };
 
-export const signup = (user) => {
+export const signup = (token) => {
   return fetch(`${API}/signup`, {
     method: "POST",
     headers: {
       Accept: "application/json",
       "Content-type": "application/json",
     },
-    body: JSON.stringify(user),
+    body: JSON.stringify(token),
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));

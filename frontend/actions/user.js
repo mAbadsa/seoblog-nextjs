@@ -20,7 +20,7 @@ const getProfile = async (token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    handleResponse(res);
+    // handleResponse(res);
     return await res.json();
   } catch (error) {
     console.log(error);
@@ -35,7 +35,7 @@ const getPhoto = async (username, token) => {
         Authorization: `Bearer ${token}`,
       },
     });
-    handleResponse(res);
+    // handleResponse(res);
     return await res.json();
   } catch (error) {
     console.log(error);
@@ -54,7 +54,7 @@ const updateUser = async (userData, token) => {
       },
       body: userData,
     });
-    handleResponse(res);
+    // handleResponse(res);
     return await updatedUser.json();
   } catch (error) {
     console.log(error);
