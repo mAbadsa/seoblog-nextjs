@@ -9,6 +9,49 @@ const _ = require("lodash");
 
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+const preSignup = (req, res) => {
+  const { name, email, password } = req.body;
+  User.findOne({ email }, (err, user) => {
+    if (user) {
+      return res.status(400).json({ error: "Email is taken" });
+    }
+
+    const token = jwt.sign(
+      { name, email, password },
+      process.env.JWT_ACCOUNT_ACTIVATION_SECRET,
+      {
+        expiresIn: "10m",
+      }
+    );
+
+    console.log(token);
+
+    const resetUrl = `${process.env.CLIENT_URL}/auth/account/activate/${token}`;
+
+    const emailContent = {
+      to: email,
+      from: process.env.EMAIL_FROM,
+      subject: `Account activation link`,
+      html: `
+            <hr/>
+            <h4>Account activation link.</h4>
+            <p>Click this link to activate you account:</p>
+            <p> ${resetUrl} </p>
+            <hr/>
+            <p>This email may contain sensetive information</p>
+            <p>https://www.seoblog.com</p>
+        `,
+    };
+
+    sendGridMail.send(emailContent).then((sent) => {
+      res.status(200).json({
+        success: true,
+        messgae: `Email has been sent to ${email}. Follow the instructions to activate your account. Link expires in 10min.`,
+      });
+    });
+  });
+};
+
 const signup = (req, res) => {
   User.findOne({ email: req.body.email }).exec((err, user) => {
     if (user) {
@@ -224,4 +267,5 @@ module.exports = {
   canUpdateDeleteBlog,
   forgetPassword,
   resetPassword,
+  preSignup,
 };
