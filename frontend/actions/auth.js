@@ -9,13 +9,26 @@ export const handleResponse = (response) => {
       Router.push({
         pathname: "/signin",
         query: {
-          message: "Your session is expired, Please signin"
+          message: "Your session is expired, Please signin",
         },
       });
     });
   } else {
     return;
   }
+};
+
+export const preSignup = (user) => {
+  return fetch(`${API}/pre-signup`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(user),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
 };
 
 export const signup = (user) => {
@@ -128,7 +141,7 @@ export const forgetPassword = (email) => {
       Accept: "application/json",
       "Content-type": "application/json",
     },
-    body: JSON.stringify({email}),
+    body: JSON.stringify({ email }),
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));
@@ -141,7 +154,7 @@ export const resetPassword = (resetPasswordToken, newPassword) => {
       Accept: "application/json",
       "Content-type": "application/json",
     },
-    body: JSON.stringify({resetPasswordToken, newPassword}),
+    body: JSON.stringify({ resetPasswordToken, newPassword }),
   })
     .then((res) => res.json())
     .catch((err) => console.log(err));
