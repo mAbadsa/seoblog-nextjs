@@ -2,6 +2,7 @@ const User = require("../models/User");
 const shortId = require("shortid");
 const jwt = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
+const jwksRsa = require("jwks-rsa");
 const errorHandler = require("../helpers/dbHandleError");
 const Blog = require("../models/Blog");
 const sendGridMail = require("@sendgrid/mail");
@@ -81,35 +82,35 @@ const preSignup = (req, res) => {
 
 const signup = (req, res) => {
   const token = req.body.token;
+  console.log("signup: ", token);
 
   if (token) {
-    jwt.verify(
-      token,
-      process.env.JWT_ACCOUNT_ACTIVATION_SECRET,
-      function (err, decoded) {
-        if (err) {
-          return res.status(401).json({
-            error: "Expired link, signup again.",
-          });
-        }
-
-        const { name, email, password } = jwt.decode(token);
-
-        let username = shortId();
-        let profile = `${process.env.CLIENT_URL}/profile/${username}`;
-
-        const user = new User({ name, email, password, username, profile });
-
-        user.save((err, resulr) => {
-          if (err) {
-            return res.status(400).json({ error: errorHandler(err) });
-          }
-          res.status(201).json({
-            message: "Signup success.",
-          });
+    jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION_SECRET, function (
+      err,
+      decoded
+    ) {
+      if (err) {
+        return res.status(401).json({
+          error: "Expired link, signup again.",
         });
       }
-    );
+
+      const { name, email, password } = jwt.decode(token);
+
+      let username = shortId();
+      let profile = `${process.env.CLIENT_URL}/profile/${username}`;
+
+      const user = new User({ name, email, password, username, profile });
+
+      user.save((err, resulr) => {
+        if (err) {
+          return res.status(400).json({ error: errorHandler(err) });
+        }
+        res.status(201).json({
+          message: "Signup success.",
+        });
+      });
+    });
   } else {
     return res.status(300).json({
       error: "Something went wrong, try again.",
@@ -119,6 +120,8 @@ const signup = (req, res) => {
 
 const signin = (req, res) => {
   const { email, password } = req.body;
+
+  console.log(email, password);
 
   User.findOne({ email }).exec((err, user) => {
     if (err || !user)
@@ -135,6 +138,8 @@ const signin = (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
+
+    console.log(token);
 
     res.cookie("token", token, { expiresIn: "1d" });
 
@@ -160,10 +165,26 @@ const signout = (req, res) => {
 
 const requireSignin = expressJwt({
   secret: process.env.JWT_SECRET,
-  algorithms: ["RS256"],
+  algorithms: ["HS256"],
 });
 
+// const requireSignin = expressJwt({
+//   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
+//   secret: jwksRsa.expressJwtSecret({
+//     cache: true,
+//     rateLimit: true,
+//     jwksRequestsPerMinute: 5,
+//     jwksUri: `https://my-authz-server/.well-known/jwks.json`,
+//   }),
+
+//   // Validate the audience and the issuer.
+//   audience: "urn:my-resource-server",
+//   issuer: "https://my-authz-server/",
+//   algorithms: ["RS256"],
+// });
+
 const authMiddleware = (req, res, next) => {
+  console.log("auth: ", req.user);
   const userId = req.user._id;
   User.findById({ _id: userId }).exec((err, user) => {
     if (err || !user) {

@@ -8,6 +8,7 @@ const Blog = require("../models/Blog");
 
 const read = (req, res) => {
   req.profile.hashed_password = undefined;
+  console.log("read profile: ", req.profile);
   return res.status(200).json(req.profile);
 };
 

@@ -47,6 +47,7 @@ const ProfileUpdate = () => {
   const getInitProfileData = async () => {
     try {
       const data = await getProfile(token);
+      console.log("Get Profile: ", data);
       setValues({
         ...values,
         username: data.username,

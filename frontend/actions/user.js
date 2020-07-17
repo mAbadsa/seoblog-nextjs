@@ -21,6 +21,7 @@ const getProfile = async (token) => {
       },
     });
     // handleResponse(res);
+    console.log(token);
     return await res.json();
   } catch (error) {
     console.log(error);
