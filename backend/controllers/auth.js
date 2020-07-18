@@ -296,11 +296,10 @@ const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 const googleLoginStrategy = (req, res) => {
   const idToken = req.body.tokenId;
-  console.log(idToken);
   client
     .verifyIdToken({ idToken, audience: process.env.GOOGLE_CLIENT_ID })
-    .then((res) => {
-      const { email_verified, email, name, jti } = res.payload;
+    .then((response) => {
+      const { email_verified, email, name, jti } = response.payload;
       if (email_verified) {
         User.findOne({ email }).exec((err, user) => {
           if (user) {
@@ -309,6 +308,7 @@ const googleLoginStrategy = (req, res) => {
             });
 
             res.cookie("token", token, { expiresIn: "1d" });
+
             const { _id, name, email, role, username } = user;
 
             return res.status(200).json({
@@ -325,8 +325,7 @@ const googleLoginStrategy = (req, res) => {
             const username = shortid.generate();
             let profile = `${process.env.CLIENT_URL}/profile/${username}`;
             let password = jti;
-            const user = new User({
-              _id,
+            const newUser = new User({
               name,
               email,
               username,
@@ -334,13 +333,14 @@ const googleLoginStrategy = (req, res) => {
               profile,
             });
 
-            user.save((err, result) => {
+            newUser.save((err, result) => {
               if (err) {
                 return res.status(400).json({ error: errorHandler(err) });
               }
-              const token = jwt.sign({ _id: result._id }, token, {
+              const token = jwt.sign({ _id: result._id }, process.env.JWT_SECRET, {
                 expiresIn: "1d",
               });
+
               res.cookie("token", token, { expiresIn: "1d" });
 
               const { _id, name, email, role, username } = result;

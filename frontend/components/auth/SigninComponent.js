@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { signin, authenticate, isAuth } from "../../actions/auth";
 import Router from "next/router";
 import Link from "next/link";
+import LoginByGoogle from "./LoginWithGoogle";
 
 const SigninComponent = ({ redirectMessage }) => {
   const [values, setValues] = useState({
@@ -75,6 +76,12 @@ const SigninComponent = ({ redirectMessage }) => {
         <div className="row">
           <div className="col-md-6 offset-3">{showRedirctMessage()}</div>
         </div>
+        <div className="row pt-3">
+          <div className="col-md-6 offset-3">
+            <LoginByGoogle />
+          </div>
+        </div>
+        <hr />
         <div className="row">
           <div className="col-md-6 offset-3">
             <form onSubmit={handleSubmit}>
@@ -117,9 +124,9 @@ const SigninComponent = ({ redirectMessage }) => {
                 </button>
               </div>
             </form>
-            <div>
-              <Link className="text-primary" href="auth/password/forget">
-                <a>Forget password</a>
+            <div className="text-center pt-4">
+              <Link href="auth/password/forget">
+                <a className="text-primary">Forget password</a>
               </Link>
             </div>
           </div>

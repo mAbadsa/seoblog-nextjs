@@ -8,7 +8,6 @@ const Blog = require("../models/Blog");
 
 const read = (req, res) => {
   req.profile.hashed_password = undefined;
-  console.log("read profile: ", req.profile);
   return res.status(200).json(req.profile);
 };
 
@@ -51,8 +50,6 @@ const updateUser = (req, res, next) => {
       });
     }
 
-    console.log(files);
-
     if (files.photo) {
       if (files.photo.size >= 10000000) {
         return res.status(400).json({
@@ -72,7 +69,6 @@ const updateUser = (req, res, next) => {
       user.hashed_password = undefined;
       user.salt = undefined;
       user.photo = undefined;
-      console.log(user);
       res.status(200).json(user);
     });
   });
@@ -82,7 +78,6 @@ const getPhoto = async (req, res) => {
   const { username } = req.params;
   try {
     const user = await User.findOne({ username }).select("photo");
-    console.log("user ", user);
     if (!user) {
       res.status(404).json({ error: "user not found" });
     }

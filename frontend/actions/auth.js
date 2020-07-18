@@ -57,6 +57,19 @@ export const signin = (user) => {
     .catch((err) => console.log(err));
 };
 
+export const loginWithGoogle = (user) => {
+  return fetch(`${API}/google-login`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify(user),
+  })
+    .then((res) => res.json())
+    .catch((err) => console.log(err));
+};
+
 // set cookie
 export const setCookie = (key, value) => {
   if (process.browser) {

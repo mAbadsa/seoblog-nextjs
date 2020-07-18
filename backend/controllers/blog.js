@@ -39,9 +39,7 @@ const getBlogs = async (req, res) => {
 
 const createBlog = (req, res) => {
   let form = new formidable.IncomingForm();
-  // console.log(form);
   form.keepExtensions = true;
-  // console.log("line 32:", form);
   form.parse(req, (err, fields, files) => {
     if (err) {
       return res.status(400).json({
@@ -93,7 +91,6 @@ const createBlog = (req, res) => {
       }
       blog.photo.data = fs.readFileSync(files.photo.path);
       blog.photo.contentType = files.photo.type;
-      // console.log("Files >>>> ", files);
     }
 
     blog.save((err, data) => {
@@ -170,7 +167,6 @@ const listAllBlogsCategoriesTags = async (req, res) => {
 };
 
 const getBlog = async (req, res) => {
-  console.log("Heloooooo");
   const slug = req.params.slug.toLowerCase();
   try {
     const blog = await Blog.findOne({ slug })
@@ -222,9 +218,7 @@ const updateBlog = (req, res) => {
     }
     let form = new formidable.IncomingForm();
 
-    // console.log(form);
     form.keepExtensions = true;
-    // console.log("line 32:", form);
     form.parse(req, (err, fields, files) => {
       if (err) {
         return res.status(400).json({
@@ -259,7 +253,6 @@ const updateBlog = (req, res) => {
         }
         blog.photo.data = fs.readFileSync(files.photo.path);
         blog.photo.contentType = files.photo.type;
-        // console.log("Files >>>> ", files);
       }
       blog.save((err, updatedBlog) => {
         if (err) {
@@ -306,7 +299,6 @@ const listRelatedBlogs = async (req, res) => {
       .select("title slug excerpt postedBy createdAt updatedAt")
       .exec();
 
-    console.log(blogs);
     res.status(200).json({
       success: true,
       blogs,
@@ -317,10 +309,7 @@ const listRelatedBlogs = async (req, res) => {
 };
 
 const blogsSearch = async (req, res) => {
-  console.log("Blogs Search");
   const search = req.query.search;
-  console.log(req.query);
-  console.log("search ", search);
   if (search) {
     try {
       const blogs = await Blog.find({
