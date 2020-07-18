@@ -7,6 +7,7 @@ const errorHandler = require("../helpers/dbHandleError");
 const Blog = require("../models/Blog");
 const sendGridMail = require("@sendgrid/mail");
 const _ = require("lodash");
+const { OAuth2Client } = require("google-auth-library");
 
 sendGridMail.setApiKey(process.env.SENDGRID_API_KEY);
 
@@ -24,8 +25,6 @@ const preSignup = (req, res) => {
         expiresIn: "10m",
       }
     );
-
-    console.log(token);
 
     const resetUrl = `${process.env.CLIENT_URL}/auth/account/activate/${token}`;
 
@@ -82,7 +81,6 @@ const preSignup = (req, res) => {
 
 const signup = (req, res) => {
   const token = req.body.token;
-  console.log("signup: ", token);
 
   if (token) {
     jwt.verify(token, process.env.JWT_ACCOUNT_ACTIVATION_SECRET, function (
@@ -121,8 +119,6 @@ const signup = (req, res) => {
 const signin = (req, res) => {
   const { email, password } = req.body;
 
-  console.log(email, password);
-
   User.findOne({ email }).exec((err, user) => {
     if (err || !user)
       return res
@@ -138,8 +134,6 @@ const signin = (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
-
-    console.log(token);
 
     res.cookie("token", token, { expiresIn: "1d" });
 
@@ -168,23 +162,7 @@ const requireSignin = expressJwt({
   algorithms: ["HS256"],
 });
 
-// const requireSignin = expressJwt({
-//   // Dynamically provide a signing key based on the kid in the header and the signing keys provided by the JWKS endpoint.
-//   secret: jwksRsa.expressJwtSecret({
-//     cache: true,
-//     rateLimit: true,
-//     jwksRequestsPerMinute: 5,
-//     jwksUri: `https://my-authz-server/.well-known/jwks.json`,
-//   }),
-
-//   // Validate the audience and the issuer.
-//   audience: "urn:my-resource-server",
-//   issuer: "https://my-authz-server/",
-//   algorithms: ["RS256"],
-// });
-
 const authMiddleware = (req, res, next) => {
-  console.log("auth: ", req.user);
   const userId = req.user._id;
   User.findById({ _id: userId }).exec((err, user) => {
     if (err || !user) {
@@ -242,8 +220,6 @@ const forgetPassword = (req, res) => {
     const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, {
       expiresIn: "10m",
     });
-
-    console.log(token);
 
     // reset url
     const resetUrl = `${process.env.CLIENT_URL}/auth/password/reset/${token}`;
@@ -316,6 +292,12 @@ const resetPassword = (req, res) => {
   });
 };
 
+const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const googleLoginStrategy = (req, res) => {
+  
+};
+
 module.exports = {
   signup,
   signin,
@@ -327,4 +309,5 @@ module.exports = {
   forgetPassword,
   resetPassword,
   preSignup,
+  googleLoginStrategy,
 };

@@ -9,6 +9,7 @@ const {
   forgetPassword,
   resetPassword,
   preSignup,
+  googleLoginStrategy,
 } = require("../controllers/auth");
 
 // Validators
@@ -39,5 +40,7 @@ router
 router
   .route("/forget-password")
   .put(forgetPasswordValidation, runValidation, forgetPassword);
+
+router.route("/google-login").post(googleLoginStrategy);
 
 module.exports = router;
