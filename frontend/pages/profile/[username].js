@@ -1,5 +1,6 @@
 import Head from "next/head";
 import Link from "next/link";
+import {withRouter} from "next/router";
 import { getPublicProfile } from "../../actions/user";
 import { isAuth } from "../../actions/auth";
 import Layout from "../../components/Layout";
@@ -63,6 +64,8 @@ const Profile = ({ user, blogs, query }) => {
       </div>
     ));
   };
+
+  console.log(user.profile);
 
   return (
     <React.Fragment>
@@ -132,8 +135,10 @@ const Profile = ({ user, blogs, query }) => {
 };
 
 Profile.getInitialProps = async ({ query }) => {
+  console.log(query);
   try {
     const userProfileInfo = await getPublicProfile(query.username);
+    console.log(userProfileInfo);
     return {
       user: userProfileInfo.user,
       blogs: userProfileInfo.blogs,
@@ -144,4 +149,4 @@ Profile.getInitialProps = async ({ query }) => {
   }
 };
 
-export default Profile;
+export default withRouter(Profile);

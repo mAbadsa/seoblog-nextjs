@@ -309,7 +309,7 @@ const googleLoginStrategy = (req, res) => {
 
             res.cookie("token", token, { expiresIn: "1d" });
 
-            const { _id, name, email, role, username } = user;
+            const { _id, name, email, role, username, profile } = user;
 
             return res.status(200).json({
               token,
@@ -319,10 +319,11 @@ const googleLoginStrategy = (req, res) => {
                 email,
                 role,
                 username,
+                profile
               },
             });
           } else {
-            const username = shortid.generate();
+            let username = shortid.generate();
             let profile = `${process.env.CLIENT_URL}/profile/${username}`;
             let password = jti;
             const newUser = new User({
@@ -343,7 +344,7 @@ const googleLoginStrategy = (req, res) => {
 
               res.cookie("token", token, { expiresIn: "1d" });
 
-              const { _id, name, email, role, username } = result;
+              const { _id, name, email, role, username, profile } = result;
 
               return res.status(200).json({
                 token,
@@ -353,6 +354,7 @@ const googleLoginStrategy = (req, res) => {
                   email,
                   role,
                   username,
+                  profile
                 },
               });
             });
