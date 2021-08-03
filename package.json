@@ -9,7 +9,7 @@
     "dev": "cd backend && run start",
     "heroku-postbuild": "cd client && npm install && npm run build",
     "project-setup": "cd backend && npm install && cd .. && cd client && npm install",
-    "run-both":"npm run dev && npm run client"
+    "run-both": "npm run dev && npm run client"
   },
   "repository": {
     "type": "git",
