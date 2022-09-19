@@ -20,21 +20,21 @@ const singleBlog = ({ blog, query }) => {
         </title>
         <meta name="description" content={`${blog.mdesc}`} />
         <link rel="canonical" href={`${DOMAIN_NAME}/blogs/${query.slug}`} />
-        <meat property="og:title" content={`${blog.title} | ${APP_NAME}`} />
+        <meta property="og:title" content={`${blog.title} | ${APP_NAME}`} />
         <meta property="og:description" content={`${blog.mdesc}`} />
-        <meat property="og:type" content="website" />
-        <meat
+        <meta property="og:type" content="website" />
+        <meta
           property="og:url"
           content={`${DOMAIN_NAME}/blogs/${query.slug}`}
         />
-        <meat property="og:site_name" content={`${APP_NAME}`} />
-        <meat property="og:image" content={`${API}/blogs/photo/${blog.slug}`} />
-        <meat
+        <meta property="og:site_name" content={`${APP_NAME}`} />
+        <meta property="og:image" content={`${API}/blogs/photo/${blog.slug}`} />
+        <meta
           property="og:image:secure_url"
           content={`${API}/blogs/photo/${blog.slug}`}
         />
-        <meat property="og:image:type" content="image/jpg" />
-        <meat property="fb:app_id" content={`${FB_APP_ID}`} />
+        <meta property="og:image:type" content="image/jpg" />
+        <meta property="fb:app_id" content={`${FB_APP_ID}`} />
       </Head>
     );
   };
